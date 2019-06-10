@@ -1,13 +1,13 @@
-package space_forum.odyssey;
+package space_forum_server.java_server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OdysseyApplication {
+public class JavaServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OdysseyApplication.class, args);
+		SpringApplication.run(JavaServerApplication.class, args);
 	}
 
 }

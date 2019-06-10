@@ -1,4 +1,4 @@
-package space_forum.odyssey;
+package space_forum_server.java_server;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class OdysseyApplicationTests {
+public class JavaServerApplicationTests {
 
 	@Test
 	public void contextLoads() {
