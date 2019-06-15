@@ -1,12 +1,14 @@
 package space_forum_server.java_server.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.*;
 
 // implementation of user model
 @Entity
 public class User {
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int id;
@@ -14,11 +16,14 @@ public class User {
   private String alias;
   private String password;
   @OneToMany
-  List<Image> likedImages;
-  @OneToMany
-  List<ForumThread> followedForumThreads;
+  private List<Image> likedImages;
   @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-  List<ForumThread> createdForumThreads;
+  private List<ForumPost> createdForumPost;
+  @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+  private List<ForumThread> createdForumThreads;
+  @OneToMany
+  private List<ForumThread> followingThreads;
+
 
   public User() {
     super();
