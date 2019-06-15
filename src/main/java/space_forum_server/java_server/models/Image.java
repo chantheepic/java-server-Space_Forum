@@ -1,6 +1,5 @@
 package space_forum_server.java_server.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -19,7 +18,7 @@ public class Image {
   private String url;
   private String description;
   @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
-  private List<Thread> threads;
+  private List<ForumThread> forumThreads;
 
   public Image() {
     super();
@@ -63,11 +62,11 @@ public class Image {
     this.description = description;
   }
 
-  public List<Thread> getThreads() {
-    return threads;
+  public List<ForumThread> getForumThreads() {
+    return forumThreads;
   }
 
-  public void setThreads(List<Thread> threads) {
-    this.threads = threads;
+  public void setForumThreads(List<ForumThread> forumThreads) {
+    this.forumThreads = forumThreads;
   }
 }

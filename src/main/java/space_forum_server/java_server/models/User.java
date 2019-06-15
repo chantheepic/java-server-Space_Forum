@@ -16,9 +16,9 @@ public class User {
   @OneToMany
   List<Image> likedImages;
   @OneToMany
-  List<Thread> followedThreads;
+  List<ForumThread> followedForumThreads;
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-  List<Thread> createdThreads;
+  List<ForumThread> createdForumThreads;
 
   public User() {
     super();
@@ -70,19 +70,19 @@ public class User {
     this.likedImages = likedImages;
   }
 
-  public List<Thread> getFollowedThreads() {
-    return followedThreads;
+  public List<ForumThread> getFollowedForumThreads() {
+    return followedForumThreads;
   }
 
-  public void setFollowedThreads(List<Thread> followedThreads) {
-    this.followedThreads = followedThreads;
+  public void setFollowedForumThreads(List<ForumThread> followedForumThreads) {
+    this.followedForumThreads = followedForumThreads;
   }
 
-  public List<Thread> getCreatedThreads() {
-    return createdThreads;
+  public List<ForumThread> getCreatedForumThreads() {
+    return createdForumThreads;
   }
 
-  public void setCreatedThreads(List<Thread> createdThreads) {
-    this.createdThreads = createdThreads;
+  public void setCreatedForumThreads(List<ForumThread> createdForumThreads) {
+    this.createdForumThreads = createdForumThreads;
   }
 }
