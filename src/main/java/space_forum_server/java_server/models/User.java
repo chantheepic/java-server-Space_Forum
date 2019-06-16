@@ -2,6 +2,7 @@ package space_forum_server.java_server.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -24,9 +25,15 @@ public class User {
   @OneToMany
   private List<ForumThread> followingThreads;
 
-
   public User() {
     super();
+  }
+
+  public User(String username, String alias, String password) {
+    this.id = 0;
+    this.username = username;
+    this.alias = alias;
+    this.password = password;
   }
 
   public int getId() {

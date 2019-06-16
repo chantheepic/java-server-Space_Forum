@@ -1,12 +1,16 @@
 package space_forum_server.java_server.models;
 
-import java.sql.Timestamp;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+    import com.google.common.hash.Hashing;
+    import java.nio.charset.StandardCharsets;
+    import java.security.NoSuchAlgorithmException;
+    import java.sql.Timestamp;
+    import java.time.LocalDateTime;
+    import javax.persistence.Entity;
+    import javax.persistence.GeneratedValue;
+    import javax.persistence.GenerationType;
+    import javax.persistence.Id;
+    import javax.persistence.JoinColumn;
+    import javax.persistence.ManyToOne;
 
 @Entity
 public class UserSession {
@@ -17,17 +21,15 @@ public class UserSession {
   @JoinColumn(name = "userid")
   private User user;
   private Timestamp loginTime;
+  private String token;
 
-  public UserSession() {
-    super();
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
+  public UserSession() throws NoSuchAlgorithmException {
+    this.id = 0;
+    this.loginTime = new Timestamp(System.currentTimeMillis());
+    String hash = Hashing.sha256()
+        .hashString(LocalDateTime.now().toString(), StandardCharsets.UTF_8)
+        .toString();
+    this.token = hash;
   }
 
   public User getUser() {
@@ -44,5 +46,13 @@ public class UserSession {
 
   public void setLoginTime(Timestamp loginTime) {
     this.loginTime = loginTime;
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
   }
 }
