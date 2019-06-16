@@ -17,4 +17,32 @@ public class UserSession {
   @JoinColumn(name = "userid")
   private User user;
   private Timestamp loginTime;
+
+  public UserSession() {
+    super();
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public Timestamp getLoginTime() {
+    return loginTime;
+  }
+
+  public void setLoginTime(Timestamp loginTime) {
+    this.loginTime = loginTime;
+  }
 }

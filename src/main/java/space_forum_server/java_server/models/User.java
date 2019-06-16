@@ -29,9 +29,67 @@ public class User {
     super();
   }
 
-  public User(String username, String alias, String password) {
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
     this.username = username;
+  }
+
+  public String getAlias() {
+    return alias;
+  }
+
+  public void setAlias(String alias) {
     this.alias = alias;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
     this.password = password;
+  }
+
+  public List<Image> getLikedImages() {
+    return likedImages;
+  }
+
+  public void setLikedImages(List<Image> likedImages) {
+    this.likedImages = likedImages;
+  }
+
+  public List<ForumPost> getCreatedForumPost() {
+    return createdForumPost;
+  }
+
+  public void setCreatedForumPost(List<ForumPost> createdForumPost) {
+    this.createdForumPost = createdForumPost;
+  }
+
+  public List<ForumThread> getCreatedForumThreads() {
+    return createdForumThreads;
+  }
+
+  public void setCreatedForumThreads(List<ForumThread> createdForumThreads) {
+    this.createdForumThreads = createdForumThreads;
+  }
+
+  public List<ForumThread> getFollowingThreads() {
+    return followingThreads;
+  }
+
+  public void setFollowingThreads(List<ForumThread> followingThreads) {
+    this.followingThreads = followingThreads;
   }
 }

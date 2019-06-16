@@ -28,6 +28,75 @@ public class ForumThread {
   private User author;
   private Timestamp createTime;
   private Timestamp lastedUpdated;
+  private int upvotes;
   @OneToMany
   private List<ForumPost> posts;
+
+  public ForumThread() {
+    super();
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public Image getImage() {
+    return image;
+  }
+
+  public void setImage(Image image) {
+    this.image = image;
+  }
+
+  public User getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(User author) {
+    this.author = author;
+  }
+
+  public Timestamp getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(Timestamp createTime) {
+    this.createTime = createTime;
+  }
+
+  public Timestamp getLastedUpdated() {
+    return lastedUpdated;
+  }
+
+  public void setLastedUpdated(Timestamp lastedUpdated) {
+    this.lastedUpdated = lastedUpdated;
+  }
+
+  public int getUpvotes() {
+    return upvotes;
+  }
+
+  public void setUpvotes(int upvotes) {
+    this.upvotes = upvotes;
+  }
+
+  public List<ForumPost> getPosts() {
+    return posts;
+  }
+
+  public void setPosts(List<ForumPost> posts) {
+    this.posts = posts;
+  }
 }

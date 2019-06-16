@@ -23,6 +23,61 @@ public class ForumPost {
   private User author;
   private Timestamp createTime;
   private String content;
+  private int upvotes;
   @OneToMany
   private List<ForumPost> replies;
+
+  public ForumPost() {
+    super();
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public User getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(User author) {
+    this.author = author;
+  }
+
+  public Timestamp getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(Timestamp createTime) {
+    this.createTime = createTime;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public int getUpvotes() {
+    return upvotes;
+  }
+
+  public void setUpvotes(int upvotes) {
+    this.upvotes = upvotes;
+  }
+
+  public List<ForumPost> getReplies() {
+    return replies;
+  }
+
+  public void setReplies(List<ForumPost> replies) {
+    this.replies = replies;
+  }
 }
+
+
