@@ -75,9 +75,6 @@ public class UserController {
   public User authenticateUser(@PathVariable("id") String sessionid) {
     try {
       UserSession session = userSessionRepository.matchSession(sessionid);
-//      if(userSessionRepository.latestSession(session.getUser().getId()).equals(session)){
-//        System.out.println("");
-//      }
       Calendar cal = Calendar.getInstance();
       cal.setTime(session.getLoginTime());
       cal.add(Calendar.DAY_OF_WEEK, 1);
