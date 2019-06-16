@@ -53,21 +53,24 @@ public class UserController {
   }
 
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/users/update")
-  public UserSession login(@RequestBody User returning) {
+  @PostMapping("/api/users/update/{id}")
+  public String updateUser(@PathVariable("id") String sessionid, @RequestBody User updatedProfile) {
     try {
-      User user = userRepository.authenticate(returning.getUsername(), returning.getPassword());
-      UserSession newUserSession = new UserSession();
-      newUserSession.setUser(user);
-      return newUserSession;
+      User user = authenticateUser(sessionid);
+      user.setUsername(updatedProfile.getUsername());
+      user.setAlias(updatedProfile.getAlias());
+      user.setPassword(updatedProfile.getPassword());
+      return "Profile Updated";
     } catch (Exception e) {
       return null;
     }
   }
 
+
+  // Not for external use. Endpoint is just for testing. Don't use on front end.
   @CrossOrigin(origins = "*")
   @GetMapping("/api/users/{id}")
-  public User AuthenticateUser(@PathVariable("id") String sessionid) {
+  public User authenticateUser(@PathVariable("id") String sessionid) {
     try {
       UserSession session = userSessionRepository.matchSession(sessionid);
 //      if(userSessionRepository.latestSession(session.getUser().getId()).equals(session)){
