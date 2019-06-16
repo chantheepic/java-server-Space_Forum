@@ -23,6 +23,8 @@ public class ForumThread {
   @ManyToOne
   @JoinColumn(name = "imageid")
   private Image image;
+  private String text;
+  private String type;
   @ManyToOne
   @JoinColumn(name = "authorid")
   private User author;
@@ -34,6 +36,22 @@ public class ForumThread {
 
   public ForumThread() {
     super();
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public void setText(String text) {
+    this.text = text;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
   }
 
   public int getId() {

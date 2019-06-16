@@ -1,15 +1,13 @@
 package space_forum_server.java_server.controllers;
 
-import java.security.NoSuchAlgorithmException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import space_forum_server.java_server.models.*;
@@ -25,17 +23,21 @@ public class UserController {
 
   @CrossOrigin(origins = "*")
   @PostMapping("/api/users/register")
-  public UserSession registerUser(@RequestBody User newUser) throws NoSuchAlgorithmException {
-    userRepository.save(newUser);
-    UserSession newUserSession = new UserSession();
-    newUserSession.setUser(newUser);
-    userSessionRepository.save(newUserSession);
-    return newUserSession;
+  public UserSession registerUser(@RequestBody User newUser) {
+    try {
+      userRepository.save(newUser);
+      UserSession newUserSession = new UserSession();
+      newUserSession.setUser(newUser);
+      userSessionRepository.save(newUserSession);
+      return newUserSession;
+    } catch (Exception e) {
+      return null;
+    }
   }
 
   @CrossOrigin(origins = "*")
   @GetMapping("/api/users/login")
-  public UserSession loginUser(@RequestBody User returning) throws NoSuchAlgorithmException {
+  public UserSession loginUser(@RequestBody User returning) {
     try {
       User user = userRepository.authenticate(returning.getUsername(), returning.getPassword());
       if (user != null) {
@@ -44,7 +46,6 @@ public class UserController {
         userSessionRepository.save(newUserSession);
         return newUserSession;
       } else {
-        System.out.println(returning.getUsername() + " " + returning.getAlias() + " " + returning.getPassword());
         return null;
       }
     } catch (Exception e) {
@@ -53,13 +54,14 @@ public class UserController {
   }
 
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/users/update/{id}")
+  @PutMapping("/api/users/update/{id}")
   public String updateUser(@PathVariable("id") String sessionid, @RequestBody User updatedProfile) {
     try {
       User user = authenticateUser(sessionid);
       user.setUsername(updatedProfile.getUsername());
       user.setAlias(updatedProfile.getAlias());
       user.setPassword(updatedProfile.getPassword());
+      userRepository.save(user);
       return "Profile Updated";
     } catch (Exception e) {
       return null;
