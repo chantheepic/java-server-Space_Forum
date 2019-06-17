@@ -21,12 +21,12 @@ public class ForumThread {
   private int id;
   private String title;
   @ManyToOne
-  @JoinColumn(name = "imageid")
+  @JoinColumn(name = "image")
   private Image image;
   private String text;
   private String type;
   @ManyToOne
-  @JoinColumn(name = "authorid")
+  @JoinColumn(name = "author")
   private User author;
   private Timestamp createTime;
   private Timestamp lastedUpdated;

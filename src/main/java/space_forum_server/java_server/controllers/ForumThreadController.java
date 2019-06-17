@@ -66,7 +66,7 @@ public class ForumThreadController {
 
   @CrossOrigin(origins = "*")
   @GetMapping("/api/threads/getbyimgid/{imageid}")
-  public List<ForumThread> findAllThreads(@PathVariable("imageid") int imageid) {
+  public List<ForumThread> findAllThreadsByImgId(@PathVariable("imageid") int imageid) {
     List<ForumThread> allThreads = (List<ForumThread>)forumThreadRepository.findAll();
     List<ForumThread> filteredThreads = new ArrayList<ForumThread>();
     for(ForumThread ft : allThreads){

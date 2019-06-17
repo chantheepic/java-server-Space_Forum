@@ -25,8 +25,7 @@ public class ImageController {
     for(Image img : likedImgs){
       String key = img.getCategory();
       if(likedByUser.containsKey(key)){
-        int val = likedByUser.get(key);
-        val++;
+        likedByUser.replace(key, likedByUser.get(key) + 1);
       } else {
         likedByUser.put(key, 1);
       }

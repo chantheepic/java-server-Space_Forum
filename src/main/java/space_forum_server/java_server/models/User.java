@@ -18,9 +18,9 @@ public class User {
   private String password;
   @OneToMany
   private List<Image> likedImages;
-  @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "postauthor", cascade = CascadeType.ALL)
   private List<ForumPost> createdForumPost;
-  @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "threadauthor", cascade = CascadeType.ALL)
   private List<ForumThread> createdForumThreads;
   @OneToMany
   private List<ForumThread> followingThreads;

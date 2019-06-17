@@ -19,16 +19,28 @@ public class ForumPost {
   private int id;
   @ManyToOne
   @JsonIgnore
-  @JoinColumn(name = "user")
+  @JoinColumn(name = "author")
   private User author;
   private Timestamp createTime;
   private String content;
   private int upvotes;
+  @ManyToOne
+  @JsonIgnore
+  @JoinColumn(name = "parentthread")
+  private ForumThread parentThread;
+  @ManyToOne
+  @JsonIgnore
+  @JoinColumn(name = "parentpost")
+  private ForumPost parentPost;
   @OneToMany
   private List<ForumPost> replies;
 
   public ForumPost() {
     super();
+  }
+
+  public ForumPost(String content) {
+    this.content = content;
   }
 
   public int getId() {
