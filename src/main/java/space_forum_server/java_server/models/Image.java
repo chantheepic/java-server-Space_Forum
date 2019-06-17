@@ -11,7 +11,7 @@ public class Image {
   @Id
   private int id;
   private String category;
-  @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
+  @OneToMany
   private List<ForumThread> forumThreads;
 
   public Image() {
