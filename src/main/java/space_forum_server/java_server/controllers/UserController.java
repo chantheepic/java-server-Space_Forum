@@ -36,7 +36,7 @@ public class UserController {
   }
 
   @CrossOrigin(origins = "*")
-  @GetMapping("/api/users/login")
+  @PostMapping("/api/users/login")
   public UserSession loginUser(@RequestBody User returning) {
     try {
       User user = userRepository.authenticate(returning.getUsername(), returning.getPassword());

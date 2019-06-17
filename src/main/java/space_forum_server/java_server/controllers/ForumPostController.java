@@ -21,7 +21,7 @@ public class ForumPostController {
   ForumThreadRepository forumThreadRepository;
 
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/posts/registerPost/{sessionid}/{threadid}")
+  @PostMapping("/api/posts/registerPost/{sessionid}/{threadid}/{}")
   public List<ForumPost> registerPost(@RequestBody ForumPost newPost, @PathVariable("sessionid") String sessionid, @PathVariable("threadid") int threadid) {
     Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
     ForumThread ft = opt.orElse(null);
