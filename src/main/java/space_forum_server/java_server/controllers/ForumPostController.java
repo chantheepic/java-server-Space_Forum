@@ -50,7 +50,7 @@ public class ForumPostController {
   }
 
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/posts/registerPost/{sessionid}/{parentpostid}")
+  @PostMapping("/api/posts/registerReply/{sessionid}/{parentpostid}")
   public List<ForumPost> registerReply(@RequestBody ForumPost newPost, @PathVariable("sessionid") String sessionid, @PathVariable("parentpostid") int parentpostid) {
     Optional<ForumPost> opt = forumPostRepository.findById(parentpostid);
     ForumPost fp = opt.orElse(null);
