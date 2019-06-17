@@ -2,6 +2,7 @@ package space_forum_server.java_server.controllers;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,12 @@ public class UserController {
   UserRepository userRepository;
   @Autowired
   UserSessionRepository userSessionRepository;
+
+  @CrossOrigin(origins = "*")
+  @GetMapping("/api/users")
+  public List<User> findAllUsers() {
+    return (List<User>)userRepository.findAll();
+  }
 
   @CrossOrigin(origins = "*")
   @PostMapping("/api/users/register")
