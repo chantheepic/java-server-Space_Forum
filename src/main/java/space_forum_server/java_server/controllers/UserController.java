@@ -54,8 +54,8 @@ public class UserController {
   }
 
   @CrossOrigin(origins = "*")
-  @PutMapping("/api/users/update/{id}")
-  public String updateUser(@PathVariable("id") String sessionid, @RequestBody User updatedProfile) {
+  @PutMapping("/api/users/update/{sessionid}")
+  public String updateUser(@PathVariable("sessionid") String sessionid, @RequestBody User updatedProfile) {
     try {
       User user = authenticateUser(sessionid);
       user.setUsername(updatedProfile.getUsername());
