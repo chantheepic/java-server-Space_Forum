@@ -24,14 +24,6 @@ public class ForumPost {
   private Timestamp createTime;
   private String content;
   private int upvotes;
-  @ManyToOne
-  @JsonIgnore
-  @JoinColumn(name = "parentthread")
-  private ForumThread parentThread;
-  @ManyToOne
-  @JsonIgnore
-  @JoinColumn(name = "parentpost")
-  private ForumPost parentPost;
   @OneToMany
   private List<ForumPost> replies;
 
