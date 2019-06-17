@@ -38,6 +38,11 @@ public class ForumThread {
     super();
   }
 
+  public ForumThread(String title, String text) {
+    this.title = title;
+    this.text = text;
+  }
+
   public String getText() {
     return text;
   }

@@ -10,11 +10,26 @@ import javax.persistence.OneToMany;
 public class Image {
   @Id
   private int id;
+  private String category;
   @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
   private List<ForumThread> forumThreads;
 
   public Image() {
     super();
+  }
+
+  public Image(int id, String category, List<ForumThread> forumThreads) {
+    this.id = id;
+    this.category = category;
+    this.forumThreads = forumThreads;
+  }
+
+  public String getCategory() {
+    return category;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
   }
 
   public int getId() {

@@ -17,25 +17,30 @@ public class ForumThreadController {
   ImageRepository imageRepository;
 
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/threads/register/{sessionid}/{imageid}")
-  public ForumThread registerThread(@PathVariable("sessionid") String sessionid, @PathVariable("imageid") int imageid) {
-    Image img;
-
-    if(imageRepository.existsById(imageid)){
-      Optional<Image> opt = imageRepository.findById(imageid);
-      img = opt.orElse(null);
-    } else {
-      Image newImg = new Image();
-      newImg.setId(imageid);
-      imageRepository.save(newImg);
-      img = newImg;
-    }
-
+  @PostMapping("/api/threads/register/{sessionid}")
+  public ForumThread registerThread(@PathVariable("sessionid") String sessionid, @RequestBody Image givenImg) {
     ForumThread ft = new ForumThread();
     UserController uc = new UserController();
     ft.setAuthor(uc.authenticateUser(sessionid));
     ft.setCreateTime(new Timestamp(System.currentTimeMillis()));
-    ft.setImage(img);
+
+    if(givenImg != null){
+      Image img;
+      if(imageRepository.existsById(givenImg.getId())){
+        Optional<Image> opt = imageRepository.findById(givenImg.getId());
+        img = opt.orElse(null);
+      } else {
+        Image newImg = new Image();
+        newImg.setId(givenImg.getId());
+        newImg.setCategory(givenImg.getCategory());
+        imageRepository.save(newImg);
+        img = newImg;
+      }
+      ft.setType("IMAGE");
+      ft.setImage(img);
+    } else {
+      ft.setType("TEXT");
+    }
 
     forumThreadRepository.save(ft);
     return ft;
@@ -71,4 +76,5 @@ public class ForumThreadController {
     }
     return filteredThreads;
   }
+
 }
