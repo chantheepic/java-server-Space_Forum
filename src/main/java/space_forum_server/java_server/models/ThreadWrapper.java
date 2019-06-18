@@ -1,20 +1,22 @@
 package space_forum_server.java_server.models;
 
-public class PostWrapper {
+public class ThreadWrapper {
   String title;
   String type;
   int imageId;
+  String imageUrl;
   String content;
   String category;
 
-  PostWrapper(){
+  ThreadWrapper(){
     super();
   }
 
-  public PostWrapper(String title, String type, int imageId, String content, String category) {
+  public ThreadWrapper(String title, String type, int imageId, String imageUrl, String content, String category) {
     this.title = title;
     this.type = type;
     this.imageId = imageId;
+    this.imageUrl = imageUrl;
     this.content = content;
     this.category = category;
   }
@@ -57,5 +59,13 @@ public class PostWrapper {
 
   public void setCategory(String category) {
     this.category = category;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
   }
 }

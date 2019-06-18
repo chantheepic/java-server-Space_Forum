@@ -5,5 +5,7 @@ import javax.persistence.OneToMany;
 
 public class Admin extends User{
   @OneToMany
+  private List<User> promotedUsers;
+  @OneToMany
   private List<User> bannedUsers;
 }

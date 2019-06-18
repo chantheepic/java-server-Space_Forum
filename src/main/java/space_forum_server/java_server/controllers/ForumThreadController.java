@@ -27,7 +27,7 @@ public class ForumThreadController {
 
   @CrossOrigin(origins = "*")
   @PostMapping("/api/threads/register/{sessionid}")
-  public ForumThread registerThread(@PathVariable("sessionid") String sessionid, @RequestBody PostWrapper givenThread) {
+  public ForumThread registerThread(@PathVariable("sessionid") String sessionid, @RequestBody ThreadWrapper givenThread) {
     ForumThread ft = new ForumThread();
     ft.setTitle(givenThread.getTitle());
     ft.setType(givenThread.getType());
@@ -46,6 +46,7 @@ public class ForumThreadController {
       } else {
         Image newImg = new Image();
         newImg.setId(givenThread.getImageId());
+        newImg.setUrl(givenThread.getImageUrl());
         newImg.setCategory(givenThread.getCategory());
         imageRepository.save(newImg);
         img = newImg;

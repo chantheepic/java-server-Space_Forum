@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import space_forum_server.java_server.models.*;
 import space_forum_server.java_server.repositories.*;
-import sun.nio.cs.US_ASCII;
 
 @RestController
 public class UserController {
