@@ -15,6 +15,14 @@ public class ForumThreadController {
   ForumThreadRepository forumThreadRepository;
   @Autowired
   ImageRepository imageRepository;
+  @Autowired
+  private UserController userController;
+
+  @CrossOrigin(origins = "*")
+  @GetMapping("/api/threads")
+  public List<ForumThread> findAllThreads() {
+    return (List<ForumThread>)forumThreadRepository.findAll();
+  }
 
   @CrossOrigin(origins = "*")
   @PostMapping("/api/threads/register/{sessionid}")
@@ -22,10 +30,11 @@ public class ForumThreadController {
     ForumThread ft = new ForumThread();
     ft.setTitle(givenThread.getTitle());
     ft.setType(givenThread.getType());
-    UserController uc = new UserController();
-    ft.setAuthor(uc.authenticateUser(sessionid));
-    ft.setCreateTime(new Timestamp(System.currentTimeMillis()));
+    ft.setAuthor(userController.authenticateUser(sessionid));
 
+    Timestamp ts = new Timestamp(System.currentTimeMillis());
+    ft.setCreateTime(ts);
+    ft.setCreateTime(ts);
     if(givenThread.getType() == "IMAGE"){
       Image img;
       if(imageRepository.existsById(givenThread.getImageId())){
@@ -60,9 +69,23 @@ public class ForumThreadController {
   }
 
   @CrossOrigin(origins = "*")
-  @GetMapping("/api/threads/getall")
-  public List<ForumThread> findAllThreads() {
-    return (List<ForumThread>)forumThreadRepository.findAll();
+  @GetMapping("/api/threads/checkowner/{sessionid}/{threadid}")
+  public boolean checkThreadOwner(@PathVariable("sessionid") String sessionid, @PathVariable("threadid") int threadid) {
+    UserController uc = new UserController();
+    User user = uc.authenticateUser(sessionid);
+    Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
+    ForumThread ft = opt.orElse(null);
+    if(user.equals(ft.getAuthor())){
+      return true;
+    }
+    return false;
+  }
+
+  @CrossOrigin(origins = "*")
+  @DeleteMapping("/api/threads/delete/{threadid}")
+  public String deleteThread(@PathVariable("sessionid") int threadid) {
+    forumThreadRepository.deleteById(threadid);
+    return "suceess";
   }
 
   @CrossOrigin(origins = "*")

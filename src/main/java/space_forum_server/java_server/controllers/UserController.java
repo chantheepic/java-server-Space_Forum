@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,13 @@ public class UserController {
   @CrossOrigin(origins = "*")
   @GetMapping("/api/users")
   public List<User> findAllUsers() {
+    return (List<User>)userRepository.findAll();
+  }
+
+  @CrossOrigin(origins = "*")
+  @DeleteMapping("/api/users/delete/{userid}")
+  public List<User> findAllUsers(@PathVariable("userid") int userid) {
+    userRepository.deleteById(userid);
     return (List<User>)userRepository.findAll();
   }
 
