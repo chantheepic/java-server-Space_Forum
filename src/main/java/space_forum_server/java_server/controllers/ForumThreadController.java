@@ -38,7 +38,7 @@ public class ForumThreadController {
     Timestamp ts = new Timestamp(System.currentTimeMillis());
     ft.setCreateTime(ts);
     ft.setCreateTime(ts);
-    if (givenThread.getType() == "IMAGE") {
+    if (givenThread.getType().equals("IMAGE")) {
       Image img;
       if (imageRepository.existsById(givenThread.getImageId())) {
         Optional<Image> opt = imageRepository.findById(givenThread.getImageId());

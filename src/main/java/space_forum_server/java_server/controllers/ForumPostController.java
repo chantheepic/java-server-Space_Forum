@@ -21,10 +21,21 @@ public class ForumPostController {
   ForumThreadRepository forumThreadRepository;
 
   @CrossOrigin(origins = "*")
-  @GetMapping("/api/posts/getbythread/{threadid}")
-  public List<ForumPost> registerPost(@PathVariable("threadid") int threadid) {
+  @PostMapping("/api/modules/{threadid}/posts/{sessionid}")
+  public List<ForumPost> findAllPosts(@PathVariable("threadid") int threadid, @PathVariable("sessionid") String sessionid) {
     Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
     ForumThread ft = opt.orElse(null);
+    return ft.getPosts();
+  }
+
+  @CrossOrigin(origins = "*")
+  @GetMapping("/api/modules/{threadid}/posts/{sessionid}")
+  public List<ForumPost> registerPost(@PathVariable("threadid") int threadid, @PathVariable("sessionid") String sessionid, @RequestBody ForumPost newPost) {
+    Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
+    ForumThread ft = opt.orElse(null);
+    forumPostRepository.save(newPost);
+    ft.getPosts().add(newPost);
+    
     ft.setLastedUpdated(new Timestamp((System.currentTimeMillis())));
     return ft.getPosts();
   }
