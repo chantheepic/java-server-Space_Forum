@@ -49,23 +49,4 @@ public class ForumPostController {
     return ft.getPosts();
   }
 
-  @CrossOrigin(origins = "*")
-  @PostMapping("/api/posts/registerReply/{sessionid}/{parentpostid}")
-  public List<ForumPost> registerReply(@RequestBody ForumPost newPost, @PathVariable("sessionid") String sessionid, @PathVariable("parentpostid") int parentpostid) {
-    Optional<ForumPost> opt = forumPostRepository.findById(parentpostid);
-    ForumPost fp = opt.orElse(null);
-
-    UserController uc = new UserController();
-    User author = uc.authenticateUser(sessionid);
-
-    newPost.setAuthor(author);
-    newPost.setCreateTime(new Timestamp(System.currentTimeMillis()));
-    newPost.setUpvotes(0);
-    forumPostRepository.save(newPost);
-    fp.getReplies().add(newPost);
-    forumPostRepository.save(fp);
-
-    return fp.getReplies();
-  }
-
 }

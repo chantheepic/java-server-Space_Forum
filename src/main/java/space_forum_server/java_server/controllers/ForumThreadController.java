@@ -11,6 +11,7 @@ import space_forum_server.java_server.repositories.*;
 
 @RestController
 public class ForumThreadController {
+
   @Autowired
   ForumThreadRepository forumThreadRepository;
   @Autowired
@@ -21,7 +22,7 @@ public class ForumThreadController {
   @CrossOrigin(origins = "*")
   @GetMapping("/api/threads")
   public List<ForumThread> findAllThreads() {
-    return (List<ForumThread>)forumThreadRepository.findAll();
+    return (List<ForumThread>) forumThreadRepository.findAll();
   }
 
   @CrossOrigin(origins = "*")
@@ -31,13 +32,15 @@ public class ForumThreadController {
     ft.setTitle(givenThread.getTitle());
     ft.setType(givenThread.getType());
     ft.setAuthor(userController.authenticateUser(sessionid));
+    ft.setUpvotedBy(new ArrayList<>());
+    ft.setDownvotedBy(new ArrayList<>());
 
     Timestamp ts = new Timestamp(System.currentTimeMillis());
     ft.setCreateTime(ts);
     ft.setCreateTime(ts);
-    if(givenThread.getType() == "IMAGE"){
+    if (givenThread.getType() == "IMAGE") {
       Image img;
-      if(imageRepository.existsById(givenThread.getImageId())){
+      if (imageRepository.existsById(givenThread.getImageId())) {
         Optional<Image> opt = imageRepository.findById(givenThread.getImageId());
         img = opt.orElse(null);
       } else {
@@ -57,28 +60,53 @@ public class ForumThreadController {
   }
 
   @CrossOrigin(origins = "*")
-  @PutMapping("/api/threads/update/{sessionid}")
-  public ForumThread updateThread(@PathVariable("sessionid") String sessionid, @RequestBody ForumThread thread) {
-    Optional<ForumThread> opt = forumThreadRepository.findById(thread.getId());
+  @GetMapping("/api/threads/checkowner/{sessionid}/{threadid}")
+  public boolean checkThreadOwner(@PathVariable("sessionid") String sessionid, @PathVariable("threadid") int threadid) {
+    User user = userController.authenticateUser(sessionid);
+    Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
+    ForumThread ft = opt.orElse(null);
+    if (user.equals(ft.getAuthor())) {
+      return true;
+    }
+    return false;
+  }
+
+  @CrossOrigin(origins = "*")
+  @PostMapping("/api/threads/vote/{sessionid}/{threadid}")
+  public ForumThread submitVote(@PathVariable("sessionid") String sessionid, @PathVariable("threadid") int threadid,
+      @RequestBody String vote) {
+    User user = userController.authenticateUser(sessionid);
+    Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
+    ForumThread ft = opt.orElse(null);
+    if (vote.equals("UPVOTE")) {
+      if(!ft.getUpvotedBy().contains(user)){
+        ft.getUpvotedBy().add(user);
+        if(ft.getDownvotedBy().contains(user)){
+          ft.getDownvotedBy().remove(user);
+        }
+      }
+    } else {
+      if(!ft.getDownvotedBy().contains(user)){
+        ft.getDownvotedBy().add(user);
+        if(ft.getUpvotedBy().contains(user)){
+          ft.getUpvotedBy().remove(user);
+        }
+      }
+    }
+    forumThreadRepository.save(ft);
+    return ft;
+  }
+
+  @CrossOrigin(origins = "*")
+  @PutMapping("/api/threads/update/{threadid}")
+  public ForumThread updateThread(@PathVariable("threadid") int threadid, @RequestBody ForumThread thread) {
+    Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
     ForumThread ft = opt.orElse(null);
     ft.setTitle(thread.getTitle());
     ft.setText(thread.getText());
     ft.setLastedUpdated(new Timestamp((System.currentTimeMillis())));
     forumThreadRepository.save(ft);
     return ft;
-  }
-
-  @CrossOrigin(origins = "*")
-  @GetMapping("/api/threads/checkowner/{sessionid}/{threadid}")
-  public boolean checkThreadOwner(@PathVariable("sessionid") String sessionid, @PathVariable("threadid") int threadid) {
-    UserController uc = new UserController();
-    User user = uc.authenticateUser(sessionid);
-    Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
-    ForumThread ft = opt.orElse(null);
-    if(user.equals(ft.getAuthor())){
-      return true;
-    }
-    return false;
   }
 
   @CrossOrigin(origins = "*")
@@ -91,10 +119,10 @@ public class ForumThreadController {
   @CrossOrigin(origins = "*")
   @GetMapping("/api/threads/getbyimgid/{imageid}")
   public List<ForumThread> findAllThreadsByImgId(@PathVariable("imageid") int imageid) {
-    List<ForumThread> allThreads = (List<ForumThread>)forumThreadRepository.findAll();
+    List<ForumThread> allThreads = (List<ForumThread>) forumThreadRepository.findAll();
     List<ForumThread> filteredThreads = new ArrayList<ForumThread>();
-    for(ForumThread ft : allThreads){
-      if(ft.getImage().getId() == imageid){
+    for (ForumThread ft : allThreads) {
+      if (ft.getImage().getId() == imageid) {
         filteredThreads.add(ft);
       }
     }

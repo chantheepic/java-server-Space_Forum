@@ -30,7 +30,10 @@ public class ForumThread {
   private User author;
   private Timestamp createTime;
   private Timestamp lastedUpdated;
-  private int upvotes;
+  @OneToMany
+  private List<User> upvotedBy;
+  @OneToMany
+  private List<User> downvotedBy;
   @OneToMany
   private List<ForumPost> posts;
 
@@ -107,12 +110,20 @@ public class ForumThread {
     this.lastedUpdated = lastedUpdated;
   }
 
-  public int getUpvotes() {
-    return upvotes;
+  public List<User> getUpvotedBy() {
+    return upvotedBy;
   }
 
-  public void setUpvotes(int upvotes) {
-    this.upvotes = upvotes;
+  public void setUpvotedBy(List<User> upvotedBy) {
+    this.upvotedBy = upvotedBy;
+  }
+
+  public List<User> getDownvotedBy() {
+    return downvotedBy;
+  }
+
+  public void setDownvotedBy(List<User> downvotedBy) {
+    this.downvotedBy = downvotedBy;
   }
 
   public List<ForumPost> getPosts() {
