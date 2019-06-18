@@ -16,6 +16,8 @@ public class User {
   private String username;
   private String alias;
   private String password;
+  private boolean banned;
+  private boolean isAdmin;
   @OneToMany
   private List<Image> likedImages;
   @OneToMany
@@ -98,5 +100,21 @@ public class User {
 
   public void setFollowingThreads(List<ForumThread> followingThreads) {
     this.followingThreads = followingThreads;
+  }
+
+  public boolean isBanned() {
+    return banned;
+  }
+
+  public void setBanned(boolean banned) {
+    this.banned = banned;
+  }
+
+  public boolean isAdmin() {
+    return isAdmin;
+  }
+
+  public void setAdmin(boolean admin) {
+    isAdmin = admin;
   }
 }

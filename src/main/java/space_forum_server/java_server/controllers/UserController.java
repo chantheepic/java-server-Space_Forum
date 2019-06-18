@@ -3,6 +3,7 @@ package space_forum_server.java_server.controllers;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import space_forum_server.java_server.models.*;
 import space_forum_server.java_server.repositories.*;
+import sun.nio.cs.US_ASCII;
 
 @RestController
 public class UserController {
@@ -78,6 +80,42 @@ public class UserController {
       user.setPassword(updatedProfile.getPassword());
       userRepository.save(user);
       return "Profile Updated";
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
+  @CrossOrigin(origins = "*")
+  @PutMapping("/api/users/promote/{direction}")
+  public String promoteUser(@PathVariable("direction") String direction,@RequestBody User u) {
+    try {
+      Optional<User> opt = userRepository.findById(u.getId());
+      User user = opt.orElse(null);
+      if(direction.equals("PROMOTE")){
+        user.setAdmin(true);
+      } else {
+        user.setAdmin(false);
+      }
+      userRepository.save(user);
+      return "Promoted to admin";
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
+  @CrossOrigin(origins = "*")
+  @PutMapping("/api/users/ban/{direction}")
+  public String banUser(@PathVariable("direction") String direction,@RequestBody User u) {
+    try {
+      Optional<User> opt = userRepository.findById(u.getId());
+      User user = opt.orElse(null);
+      if(direction.equals("BAN")){
+        user.setBanned(true);
+      } else {
+        user.setBanned(false);
+      }
+      userRepository.save(user);
+      return "User Banned";
     } catch (Exception e) {
       return null;
     }
