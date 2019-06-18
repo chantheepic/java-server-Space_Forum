@@ -22,7 +22,10 @@ public class ForumPost {
   private User author;
   private Timestamp updateTime;
   private String content;
-  private int upvotes;
+  @OneToMany
+  private List<User> upvotedBy;
+  @OneToMany
+  private List<User> downvotedBy;
   @OneToMany
   private List<ForumPost> replies;
 
@@ -32,6 +35,17 @@ public class ForumPost {
 
   public ForumPost(String content) {
     this.content = content;
+  }
+
+  public ForumPost(User author, Timestamp updateTime, String content,
+      List<User> upvotedBy, List<User> downvotedBy,
+      List<ForumPost> replies) {
+    this.author = author;
+    this.updateTime = updateTime;
+    this.content = content;
+    this.upvotedBy = upvotedBy;
+    this.downvotedBy = downvotedBy;
+    this.replies = replies;
   }
 
   public int getId() {
@@ -66,12 +80,20 @@ public class ForumPost {
     this.content = content;
   }
 
-  public int getUpvotes() {
-    return upvotes;
+  public List<User> getUpvotedBy() {
+    return upvotedBy;
   }
 
-  public void setUpvotes(int upvotes) {
-    this.upvotes = upvotes;
+  public void setUpvotedBy(List<User> upvotedBy) {
+    this.upvotedBy = upvotedBy;
+  }
+
+  public List<User> getDownvotedBy() {
+    return downvotedBy;
+  }
+
+  public void setDownvotedBy(List<User> downvotedBy) {
+    this.downvotedBy = downvotedBy;
   }
 
   public List<ForumPost> getReplies() {

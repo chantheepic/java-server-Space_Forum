@@ -38,6 +38,21 @@ public class User {
     this.password = password;
   }
 
+  public User(String username, String alias, String password, boolean banned, boolean isAdmin,
+      List<Image> likedImages, List<ForumPost> createdForumPost,
+      List<ForumThread> createdForumThreads,
+      List<ForumThread> followingThreads) {
+    this.username = username;
+    this.alias = alias;
+    this.password = password;
+    this.banned = banned;
+    this.isAdmin = isAdmin;
+    this.likedImages = likedImages;
+    this.createdForumPost = createdForumPost;
+    this.createdForumThreads = createdForumThreads;
+    this.followingThreads = followingThreads;
+  }
+
   public String getPassword() {
     return password;
   }

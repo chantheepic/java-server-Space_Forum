@@ -46,6 +46,21 @@ public class ForumThread {
     this.text = text;
   }
 
+  public ForumThread(String title, Image image, String text, String type,
+      User author, Timestamp createTime, Timestamp lastedUpdated,
+      List<User> upvotedBy, List<User> downvotedBy, List<ForumPost> posts) {
+    this.title = title;
+    this.image = image;
+    this.text = text;
+    this.type = type;
+    this.author = author;
+    this.createTime = createTime;
+    this.lastedUpdated = lastedUpdated;
+    this.upvotedBy = upvotedBy;
+    this.downvotedBy = downvotedBy;
+    this.posts = posts;
+  }
+
   public String getText() {
     return text;
   }

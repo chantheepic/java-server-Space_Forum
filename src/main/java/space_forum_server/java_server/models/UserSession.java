@@ -32,6 +32,12 @@ public class UserSession {
     this.token = hash;
   }
 
+  public UserSession(User user, Timestamp loginTime, String token) {
+    this.user = user;
+    this.loginTime = loginTime;
+    this.token = token;
+  }
+
   public User getUser() {
     return user;
   }
