@@ -67,6 +67,35 @@ public class ForumPostController {
     return false;
   }
 
+  @CrossOrigin(origins = "*")
+  @PostMapping("/api/user/{sessionid}/posts/vote/{postid}")
+  public ForumPost submitVote(@PathVariable("sessionid") String sessionid, @PathVariable("postid") int postid,
+      @RequestBody String vote) {
+    User user = userController.authenticateUser(sessionid);
+    Optional<ForumPost> opt = forumPostRepository.findById(postid);
+    ForumPost fp = opt.orElse(null);
+    if (vote.equals("UPVOTE")) {
+      if(fp.getUpvotedBy().contains(user)){
+        fp.getUpvotedBy().remove(user);
+      } else {
+        fp.getUpvotedBy().add(user);
+        if(fp.getDownvotedBy().contains(user)){
+          fp.getDownvotedBy().remove(user);
+        }
+      }
+    } else {
+      if(fp.getDownvotedBy().contains(user)){
+        fp.getDownvotedBy().remove(user);
+      } else {
+        fp.getDownvotedBy().add(user);
+        if(fp.getUpvotedBy().contains(user)){
+          fp.getUpvotedBy().remove(user);
+        }
+      }
+    }
+    forumPostRepository.save(fp);
+    return fp;
+  }
 
   @CrossOrigin(origins = "*")
   @PutMapping("/api/posts/{postid}")

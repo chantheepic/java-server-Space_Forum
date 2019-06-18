@@ -32,8 +32,6 @@ public class ForumThreadController {
     ft.setTitle(givenThread.getTitle());
     ft.setType(givenThread.getType());
     ft.setAuthor(userController.authenticateUser(sessionid));
-    ft.setUpvotedBy(new ArrayList<>());
-    ft.setDownvotedBy(new ArrayList<>());
 
     Timestamp ts = new Timestamp(System.currentTimeMillis());
     ft.setCreateTime(ts);
