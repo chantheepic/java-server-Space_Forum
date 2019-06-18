@@ -1,12 +1,12 @@
 package space_forum_server.java_server.models;
 
 public class ThreadWrapper {
-  String title;
-  String type;
-  int imageId;
-  String imageUrl;
-  String content;
-  String category;
+  private String title;
+  private String type;
+  private int imageId;
+  private String imageUrl;
+  private String content;
+  private String category;
 
   ThreadWrapper(){
     super();

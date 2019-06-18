@@ -3,11 +3,11 @@ package space_forum_server.java_server.controllers;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ThreadPoolExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import space_forum_server.java_server.models.ForumPost;
 import space_forum_server.java_server.models.ForumThread;
+import space_forum_server.java_server.models.PostWrapper;
 import space_forum_server.java_server.models.User;
 import space_forum_server.java_server.repositories.ForumPostRepository;
 import space_forum_server.java_server.repositories.ForumThreadRepository;
@@ -19,9 +19,11 @@ public class ForumPostController {
   ForumPostRepository forumPostRepository;
   @Autowired
   ForumThreadRepository forumThreadRepository;
+  @Autowired
+  private UserController userController;
 
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/modules/{threadid}/posts/{sessionid}")
+  @PostMapping("/api/users/{sessionid}/threads/{threadid}/posts")
   public List<ForumPost> findAllPosts(@PathVariable("threadid") int threadid, @PathVariable("sessionid") String sessionid) {
     Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
     ForumThread ft = opt.orElse(null);
@@ -29,35 +31,59 @@ public class ForumPostController {
   }
 
   @CrossOrigin(origins = "*")
-  @GetMapping("/api/modules/{threadid}/posts/{sessionid}")
-  public List<ForumPost> registerPost(@PathVariable("threadid") int threadid, @PathVariable("sessionid") String sessionid, @RequestBody ForumPost newPost) {
-    Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
-    ForumThread ft = opt.orElse(null);
+  @GetMapping("/api/users/{sessionid}/posts/{replyid}")
+  public List<ForumPost> registerPost(@PathVariable("replyid") int replyid, @PathVariable("sessionid") String sessionid, @RequestBody PostWrapper postWrapper) {
+    User author = userController.authenticateUser(sessionid);
+    ForumPost newPost = new ForumPost();
+    newPost.setContent(postWrapper.getContent());
+    newPost.setAuthor(author);
+    newPost.setUpdateTime(new Timestamp(System.currentTimeMillis()));
     forumPostRepository.save(newPost);
-    ft.getPosts().add(newPost);
-    
-    ft.setLastedUpdated(new Timestamp((System.currentTimeMillis())));
-    return ft.getPosts();
+
+    if(postWrapper.getType().equals("THREADREPLY")){
+      Optional<ForumThread> opt = forumThreadRepository.findById(replyid);
+      ForumThread ft = opt.orElse(null);
+      ft.getPosts().add(newPost);
+      forumThreadRepository.save(ft);
+      return ft.getPosts();
+    } else {
+      Optional<ForumPost> opt = forumPostRepository.findById(replyid);
+      ForumPost fp = opt.orElse(null);
+      fp.getReplies().add(newPost);
+      forumPostRepository.save(fp);
+      return fp.getReplies();
+    }
   }
 
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/posts/registerPost/{sessionid}/{threadid}")
-  public List<ForumPost> registerPost(@RequestBody ForumPost newPost, @PathVariable("sessionid") String sessionid, @PathVariable("threadid") int threadid) {
-    Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
-    ForumThread ft = opt.orElse(null);
-    ft.setLastedUpdated(new Timestamp((System.currentTimeMillis())));
+  @GetMapping("/api/users/{sessionid}/posts/checkOwner{postid}")
+  public boolean checkPostOwner(@PathVariable("sessionid") String sessionid, @PathVariable("postid") int postid) {
+    User user = userController.authenticateUser(sessionid);
+    Optional<ForumPost> opt = forumPostRepository.findById(postid);
+    ForumPost fp = opt.orElse(null);
+    if (user.equals(fp.getAuthor())) {
+      return true;
+    }
+    return false;
+  }
 
-    UserController uc = new UserController();
-    User author = uc.authenticateUser(sessionid);
 
-    newPost.setAuthor(author);
-    newPost.setCreateTime(new Timestamp(System.currentTimeMillis()));
-    newPost.setUpvotes(0);
-    forumPostRepository.save(newPost);
-    ft.getPosts().add(newPost);
-    forumThreadRepository.save(ft);
+  @CrossOrigin(origins = "*")
+  @PutMapping("/api/posts/{postid}")
+  public ForumPost updatePost(@PathVariable("postid") int postid, @RequestBody ForumPost update) {
+    Optional<ForumPost> opt = forumPostRepository.findById(postid);
+    ForumPost fp = opt.orElse(null);
+    fp.setContent(update.getContent());
+    fp.setUpdateTime(update.getUpdateTime());
+    forumPostRepository.save(fp);
+    return fp;
+  }
 
-    return ft.getPosts();
+  @CrossOrigin(origins = "*")
+  @DeleteMapping("/api/posts/{postid}")
+  public String deletePost(@PathVariable("postid") int postid) {
+    forumPostRepository.deleteById(postid);
+    return "suceess";
   }
 
 }

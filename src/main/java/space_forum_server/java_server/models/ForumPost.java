@@ -3,7 +3,6 @@ package space_forum_server.java_server.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.sql.Timestamp;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,7 +20,7 @@ public class ForumPost {
   @JsonIgnore
   @JoinColumn(name = "author")
   private User author;
-  private Timestamp createTime;
+  private Timestamp updateTime;
   private String content;
   private int upvotes;
   @OneToMany
@@ -51,12 +50,12 @@ public class ForumPost {
     this.author = author;
   }
 
-  public Timestamp getCreateTime() {
-    return createTime;
+  public Timestamp getUpdateTime() {
+    return updateTime;
   }
 
-  public void setCreateTime(Timestamp createTime) {
-    this.createTime = createTime;
+  public void setUpdateTime(Timestamp updateTime) {
+    this.updateTime = updateTime;
   }
 
   public String getContent() {

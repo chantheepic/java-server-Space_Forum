@@ -80,14 +80,18 @@ public class ForumThreadController {
     Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
     ForumThread ft = opt.orElse(null);
     if (vote.equals("UPVOTE")) {
-      if(!ft.getUpvotedBy().contains(user)){
+      if(ft.getUpvotedBy().contains(user)){
+        ft.getUpvotedBy().remove(user);
+      } else {
         ft.getUpvotedBy().add(user);
         if(ft.getDownvotedBy().contains(user)){
           ft.getDownvotedBy().remove(user);
         }
       }
     } else {
-      if(!ft.getDownvotedBy().contains(user)){
+      if(ft.getDownvotedBy().contains(user)){
+        ft.getDownvotedBy().remove(user);
+      } else {
         ft.getDownvotedBy().add(user);
         if(ft.getUpvotedBy().contains(user)){
           ft.getUpvotedBy().remove(user);
