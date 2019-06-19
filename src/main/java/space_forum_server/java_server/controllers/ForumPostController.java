@@ -23,7 +23,7 @@ public class ForumPostController {
   private UserController userController;
 
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/users/{sessionid}/threads/{threadid}/posts")
+  @GetMapping("/api/users/{sessionid}/threads/{threadid}/posts")
   public List<ForumPost> findAllPosts(@PathVariable("threadid") int threadid, @PathVariable("sessionid") String sessionid) {
     Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
     ForumThread ft = opt.orElse(null);
@@ -31,7 +31,7 @@ public class ForumPostController {
   }
 
   @CrossOrigin(origins = "*")
-  @GetMapping("/api/users/{sessionid}/posts/{replyid}")
+  @PostMapping("/api/users/{sessionid}/posts/{replyid}")
   public List<ForumPost> registerPost(@PathVariable("replyid") int replyid, @PathVariable("sessionid") String sessionid, @RequestBody PostWrapper postWrapper) {
     User author = userController.authenticateUser(sessionid);
     ForumPost newPost = new ForumPost();
@@ -65,36 +65,6 @@ public class ForumPostController {
       return true;
     }
     return false;
-  }
-
-  @CrossOrigin(origins = "*")
-  @PostMapping("/api/user/{sessionid}/posts/vote/{postid}")
-  public ForumPost submitVote(@PathVariable("sessionid") String sessionid, @PathVariable("postid") int postid,
-      @RequestBody String vote) {
-    User user = userController.authenticateUser(sessionid);
-    Optional<ForumPost> opt = forumPostRepository.findById(postid);
-    ForumPost fp = opt.orElse(null);
-    if (vote.equals("UPVOTE")) {
-      if(fp.getUpvotedBy().contains(user)){
-        fp.getUpvotedBy().remove(user);
-      } else {
-        fp.getUpvotedBy().add(user);
-        if(fp.getDownvotedBy().contains(user)){
-          fp.getDownvotedBy().remove(user);
-        }
-      }
-    } else {
-      if(fp.getDownvotedBy().contains(user)){
-        fp.getDownvotedBy().remove(user);
-      } else {
-        fp.getDownvotedBy().add(user);
-        if(fp.getUpvotedBy().contains(user)){
-          fp.getUpvotedBy().remove(user);
-        }
-      }
-    }
-    forumPostRepository.save(fp);
-    return fp;
   }
 
   @CrossOrigin(origins = "*")

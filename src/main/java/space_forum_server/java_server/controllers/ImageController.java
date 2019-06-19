@@ -6,14 +6,20 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import space_forum_server.java_server.models.*;
+import space_forum_server.java_server.repositories.ImageRepository;
 
 @RestController
 public class ImageController {
+
+  @Autowired
+  ImageRepository imageRepository;
+
   @CrossOrigin(origins = "*")
   @GetMapping("/api/images/recommendCategory/{sessionid}")
   public String recommend(@PathVariable("sessionid") String sessionid) {
@@ -33,4 +39,22 @@ public class ImageController {
 
     return Collections.max(likedByUser.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
   }
+//
+//  @CrossOrigin(origins = "*")
+//  @PostMapping("/api/images")
+//  public List<Image> findAllImages() {
+//    return (List<Image>)imageRepository.findAll();
+//  }
+//
+//  @CrossOrigin(origins = "*")
+//  @GetMapping("/api/images")
+//  public List<Image> findAllImages() {
+//    return (List<Image>)imageRepository.findAll();
+//  }
+//
+//  @DeleteMapping("/api/images/{imageid}")
+//  public List<Image> deleteImage() {
+//    return (List<Image>)imageRepository.findAll();
+//  }
+
 }
