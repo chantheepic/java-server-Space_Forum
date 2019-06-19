@@ -57,7 +57,7 @@ public class UserController {
     try {
       User user = userRepository.authenticate(returning.getUsername(), returning.getPassword());
       UserSession newUserSession = new UserSession();
-      if (user != null) {
+      if (user == null) {
         return null;
       }
       if (user.isBanned()) {
