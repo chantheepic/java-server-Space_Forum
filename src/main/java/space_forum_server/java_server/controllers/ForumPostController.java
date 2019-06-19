@@ -56,7 +56,7 @@ public class ForumPostController {
   }
 
   @CrossOrigin(origins = "*")
-  @GetMapping("/api/users/{sessionid}/posts/checkOwner{postid}")
+  @GetMapping("/api/users/{sessionid}/posts/{postid}/checkOwner")
   public boolean checkPostOwner(@PathVariable("sessionid") String sessionid, @PathVariable("postid") int postid) {
     User user = userController.authenticateUser(sessionid);
     Optional<ForumPost> opt = forumPostRepository.findById(postid);
