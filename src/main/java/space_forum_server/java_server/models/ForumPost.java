@@ -26,6 +26,8 @@ public class ForumPost {
   private List<User> upvotedBy;
   @OneToMany
   private List<User> downvotedBy;
+  @ManyToOne
+  private ForumThread associatedThread;
   @OneToMany
   private List<ForumPost> replies;
 
@@ -38,14 +40,23 @@ public class ForumPost {
   }
 
   public ForumPost(User author, Timestamp updateTime, String content,
-      List<User> upvotedBy, List<User> downvotedBy,
+      List<User> upvotedBy, List<User> downvotedBy, ForumThread associatedThread,
       List<ForumPost> replies) {
     this.author = author;
     this.updateTime = updateTime;
     this.content = content;
     this.upvotedBy = upvotedBy;
     this.downvotedBy = downvotedBy;
+    this.associatedThread = associatedThread;
     this.replies = replies;
+  }
+
+  public ForumThread getAssociatedThread() {
+    return associatedThread;
+  }
+
+  public void setAssociatedThread(ForumThread associatedThread) {
+    this.associatedThread = associatedThread;
   }
 
   public int getId() {

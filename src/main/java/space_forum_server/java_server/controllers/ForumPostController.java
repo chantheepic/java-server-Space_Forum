@@ -1,6 +1,7 @@
 package space_forum_server.java_server.controllers;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,35 +25,40 @@ public class ForumPostController {
 
   @CrossOrigin(origins = "*")
   @GetMapping("/api/users/{sessionid}/threads/{threadid}/posts")
-  public List<ForumPost> findAllPosts(@PathVariable("threadid") int threadid, @PathVariable("sessionid") String sessionid) {
+  public List<ForumPost> findAllPosts(@PathVariable("threadid") int threadid,
+      @PathVariable("sessionid") String sessionid) {
     Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
     ForumThread ft = opt.orElse(null);
     return ft.getPosts();
   }
 
+  // Uses a wrapper to take in nedded threadid (required) and postid (optional)
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/users/{sessionid}/posts/{replyid}")
-  public List<ForumPost> registerPost(@PathVariable("replyid") int replyid, @PathVariable("sessionid") String sessionid, @RequestBody PostWrapper postWrapper) {
+  @PostMapping("/api/users/{sessionid}/posts")
+  public ForumThread registerPost(@PathVariable("sessionid") String sessionid, @RequestBody PostWrapper postWrapper) {
     User author = userController.authenticateUser(sessionid);
     ForumPost newPost = new ForumPost();
     newPost.setContent(postWrapper.getContent());
     newPost.setAuthor(author);
     newPost.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+
+    Optional<ForumThread> opt = forumThreadRepository.findById(postWrapper.getThreadid());
+    ForumThread ft = opt.orElse(null);
+    newPost.setAssociatedThread(ft);
     forumPostRepository.save(newPost);
 
-    if(postWrapper.getType().equals("THREADREPLY")){
-      Optional<ForumThread> opt = forumThreadRepository.findById(replyid);
-      ForumThread ft = opt.orElse(null);
+    if (postWrapper.getType().equals("THREADREPLY")) {
       ft.getPosts().add(newPost);
       forumThreadRepository.save(ft);
-      return ft.getPosts();
-    } else {
-      Optional<ForumPost> opt = forumPostRepository.findById(replyid);
-      ForumPost fp = opt.orElse(null);
+    }
+    if (postWrapper.getType().equals("POSTREPLY")){
+      Optional<ForumPost> optfp = forumPostRepository.findById(postWrapper.getPostid());
+      ForumPost fp = optfp.orElse(null);
       fp.getReplies().add(newPost);
       forumPostRepository.save(fp);
-      return fp.getReplies();
     }
+
+    return ft;
   }
 
   @CrossOrigin(origins = "*")
@@ -73,7 +79,7 @@ public class ForumPostController {
     Optional<ForumPost> opt = forumPostRepository.findById(postid);
     ForumPost fp = opt.orElse(null);
     fp.setContent(update.getContent());
-    fp.setUpdateTime(update.getUpdateTime());
+    fp.setUpdateTime(new Timestamp(System.currentTimeMillis()));
     forumPostRepository.save(fp);
     return fp;
   }

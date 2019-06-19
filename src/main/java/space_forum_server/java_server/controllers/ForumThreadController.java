@@ -129,14 +129,18 @@ public class ForumThreadController {
   @CrossOrigin(origins = "*")
   @GetMapping("/api/threads/getbyimgid/{imageid}")
   public List<ForumThread> findAllThreadsByImgId(@PathVariable("imageid") int imageid) {
-    List<ForumThread> allThreads = (List<ForumThread>) forumThreadRepository.findAll();
-    List<ForumThread> filteredThreads = new ArrayList<ForumThread>();
-    for (ForumThread ft : allThreads) {
-      if (ft.getImage().getId() == imageid) {
-        filteredThreads.add(ft);
+    try {
+      List<ForumThread> allThreads = (List<ForumThread>) forumThreadRepository.findAll();
+      List<ForumThread> filteredThreads = new ArrayList<ForumThread>();
+      for (ForumThread ft : allThreads) {
+        if (ft.getImage().getId() == imageid) {
+          filteredThreads.add(ft);
+        }
       }
+      return filteredThreads;
+    } catch (Exception e){
+      return new ArrayList<ForumThread>();
     }
-    return filteredThreads;
   }
 
 }
