@@ -2,15 +2,15 @@ package space_forum_server.java_server.models;
 
 public class PostWrapper {
   private String type;
-  private int threadid;
-  private int postid;
+  private Integer threadid;
+  private Integer postid;
   private String content;
 
   public PostWrapper(){
     super();
   }
 
-  public PostWrapper(String type, int threadid, int postid, String content) {
+  public PostWrapper(String type, Integer threadid, Integer postid, String content) {
     this.type = type;
     this.threadid = threadid;
     this.postid = postid;
@@ -25,19 +25,19 @@ public class PostWrapper {
     this.type = type;
   }
 
-  public int getThreadid() {
+  public Integer getThreadid() {
     return threadid;
   }
 
-  public void setThreadid(int threadid) {
+  public void setThreadid(Integer threadid) {
     this.threadid = threadid;
   }
 
-  public int getPostid() {
+  public Integer getPostid() {
     return postid;
   }
 
-  public void setPostid(int postid) {
+  public void setPostid(Integer postid) {
     this.postid = postid;
   }
 
