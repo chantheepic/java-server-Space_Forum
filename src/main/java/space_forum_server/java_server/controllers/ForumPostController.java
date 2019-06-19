@@ -1,7 +1,6 @@
 package space_forum_server.java_server.controllers;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class ForumPostController {
   @CrossOrigin(origins = "*")
   @GetMapping("/api/users/{sessionid}/threads/{threadid}/posts")
   public List<ForumPost> findAllPosts(@PathVariable("threadid") int threadid,
-      @PathVariable("sessionid") String sessionid) {
+                                      @PathVariable("sessionid") String sessionid) {
     Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
     ForumThread ft = opt.orElse(null);
     return ft.getPosts();

@@ -27,6 +27,7 @@ public class ForumPost {
   @OneToMany
   private List<User> downvotedBy;
   @ManyToOne
+  @JsonIgnore
   @JoinColumn(name = "thread")
   private ForumThread associatedThread;
   @OneToMany
@@ -41,8 +42,8 @@ public class ForumPost {
   }
 
   public ForumPost(User author, Timestamp updateTime, String content,
-      List<User> upvotedBy, List<User> downvotedBy, ForumThread associatedThread,
-      List<ForumPost> replies) {
+                   List<User> upvotedBy, List<User> downvotedBy, ForumThread associatedThread,
+                   List<ForumPost> replies) {
     this.author = author;
     this.updateTime = updateTime;
     this.content = content;
@@ -116,5 +117,3 @@ public class ForumPost {
     this.replies = replies;
   }
 }
-
-
