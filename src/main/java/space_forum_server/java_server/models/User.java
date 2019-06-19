@@ -18,7 +18,7 @@ public class User {
   private String password;
   private boolean banned;
   private boolean isAdmin;
-  @OneToMany
+  @ManyToMany
   private List<Image> likedImages;
   @OneToMany
   private List<ForumPost> createdForumPost;

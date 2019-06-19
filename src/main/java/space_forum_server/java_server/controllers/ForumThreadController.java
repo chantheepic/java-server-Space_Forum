@@ -26,6 +26,13 @@ public class ForumThreadController {
   }
 
   @CrossOrigin(origins = "*")
+  @GetMapping("/api/threads/{threadid}")
+  public ForumThread findAllThreadById(@PathVariable("threadid") int threadid) {
+    Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
+    return opt.orElse(null);
+  }
+
+  @CrossOrigin(origins = "*")
   @PostMapping("/api/threads/register/{sessionid}")
   public ForumThread registerThread(@PathVariable("sessionid") String sessionid, @RequestBody ThreadWrapper givenThread) {
     ForumThread ft = new ForumThread();

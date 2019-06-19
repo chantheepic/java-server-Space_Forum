@@ -16,7 +16,7 @@ import space_forum_server.java_server.models.*;
 public class ImageController {
   @CrossOrigin(origins = "*")
   @GetMapping("/api/images/recommendCategory/{sessionid}")
-  public String findAllThreads(@PathVariable("sessionid") String sessionid) {
+  public String recommend(@PathVariable("sessionid") String sessionid) {
     UserController uc = new UserController();
     List<Image> likedImgs = uc.authenticateUser(sessionid).getLikedImages();
 
