@@ -51,7 +51,11 @@ public class ImageController {
     User user = userController.authenticateUser(sessionid);
     Optional<Image> opt = imageRepository.findById(imageid);
     Image img = opt.orElse(null);
-    img.getLikedBy().add(user);
+    if(img.getLikedBy().contains(user)){
+      img.getLikedBy().remove(user);
+    } else {
+      img.getLikedBy().add(user);
+    }
     imageRepository.save(img);
     return img;
   }
