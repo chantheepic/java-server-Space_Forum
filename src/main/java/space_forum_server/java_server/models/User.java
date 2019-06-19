@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 // implementation of user model
 @Entity
@@ -19,6 +21,12 @@ public class User {
   private boolean banned;
   private boolean isAdmin;
   @ManyToMany
+  @JoinTable(name = "FavoriteImages",
+      joinColumns = @JoinColumn(name = "UserID",
+          referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name =
+          "ImageID", referencedColumnName = "id"))
+  @Fetch(value = FetchMode.JOIN)
   private List<Image> likedImages;
   @OneToMany
   private List<ForumPost> createdForumPost;

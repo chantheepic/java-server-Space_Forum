@@ -3,6 +3,8 @@ package space_forum_server.java_server.models;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 public class Image {
@@ -12,8 +14,8 @@ public class Image {
   private String category;
   @OneToMany
   private List<ForumThread> forumThreads;
-  @ManyToMany
-  @JoinColumn(name = "user")
+  @ManyToMany(mappedBy = "likedImages", fetch = FetchType.EAGER)
+  @Fetch(value = FetchMode.JOIN)
   private List<User> likedBy;
 
   public Image() {

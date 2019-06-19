@@ -23,9 +23,8 @@ public class ForumPostController {
   private UserController userController;
 
   @CrossOrigin(origins = "*")
-  @GetMapping("/api/users/{sessionid}/threads/{threadid}/posts")
-  public List<ForumPost> findAllPosts(@PathVariable("threadid") int threadid,
-                                      @PathVariable("sessionid") String sessionid) {
+  @GetMapping("/api/threads/{threadid}/posts")
+  public List<ForumPost> findAllPosts(@PathVariable("threadid") int threadid) {
     Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
     ForumThread ft = opt.orElse(null);
     return ft.getPosts();
