@@ -27,14 +27,14 @@ public class UserController {
   @CrossOrigin(origins = "*")
   @GetMapping("/api/users")
   public List<User> findAllUsers() {
-    return (List<User>)userRepository.findAll();
+    return (List<User>) userRepository.findAll();
   }
 
   @CrossOrigin(origins = "*")
   @DeleteMapping("/api/users/delete/{userid}")
   public List<User> findAllUsers(@PathVariable("userid") int userid) {
     userRepository.deleteById(userid);
-    return (List<User>)userRepository.findAll();
+    return (List<User>) userRepository.findAll();
   }
 
   @CrossOrigin(origins = "*")
@@ -56,14 +56,18 @@ public class UserController {
   public UserSession loginUser(@RequestBody User returning) {
     try {
       User user = userRepository.authenticate(returning.getUsername(), returning.getPassword());
+      UserSession newUserSession = new UserSession();
       if (user != null) {
-        UserSession newUserSession = new UserSession();
-        newUserSession.setUser(user);
-        userSessionRepository.save(newUserSession);
-        return newUserSession;
-      } else {
         return null;
       }
+      if (user.isBanned()) {
+        newUserSession.setUser(user);
+        newUserSession.setToken("BANNED");
+        return newUserSession;
+      }
+      newUserSession.setUser(user);
+      userSessionRepository.save(newUserSession);
+      return newUserSession;
     } catch (Exception e) {
       return null;
     }
@@ -86,11 +90,11 @@ public class UserController {
 
   @CrossOrigin(origins = "*")
   @PutMapping("/api/users/promote/{direction}")
-  public String promoteUser(@PathVariable("direction") String direction,@RequestBody User u) {
+  public String promoteUser(@PathVariable("direction") String direction, @RequestBody User u) {
     try {
       Optional<User> opt = userRepository.findById(u.getId());
       User user = opt.orElse(null);
-      if(direction.equals("PROMOTE")){
+      if (direction.equals("PROMOTE")) {
         user.setAdmin(true);
       } else {
         user.setAdmin(false);
@@ -104,11 +108,11 @@ public class UserController {
 
   @CrossOrigin(origins = "*")
   @PutMapping("/api/users/ban/{direction}")
-  public String banUser(@PathVariable("direction") String direction,@RequestBody User u) {
+  public String banUser(@PathVariable("direction") String direction, @RequestBody User u) {
     try {
       Optional<User> opt = userRepository.findById(u.getId());
       User user = opt.orElse(null);
-      if(direction.equals("BAN")){
+      if (direction.equals("BAN")) {
         user.setBanned(true);
       } else {
         user.setBanned(false);

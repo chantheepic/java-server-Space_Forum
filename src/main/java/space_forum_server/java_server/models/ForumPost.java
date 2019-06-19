@@ -18,7 +18,6 @@ public class ForumPost {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   @ManyToOne
-  @JsonIgnore
   @JoinColumn(name = "author")
   private User author;
   private Timestamp updateTime;
@@ -28,7 +27,6 @@ public class ForumPost {
   @OneToMany
   private List<User> downvotedBy;
   @ManyToOne
-  @JsonIgnore
   @JoinColumn(name = "thread")
   private ForumThread associatedThread;
   @OneToMany

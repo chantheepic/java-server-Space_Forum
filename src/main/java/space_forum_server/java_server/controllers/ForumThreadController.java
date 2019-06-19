@@ -27,7 +27,7 @@ public class ForumThreadController {
 
   @CrossOrigin(origins = "*")
   @GetMapping("/api/threads/{threadid}")
-  public ForumThread findAllThreadById(@PathVariable("threadid") int threadid) {
+  public ForumThread findThreadById(@PathVariable("threadid") int threadid) {
     Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
     return opt.orElse(null);
   }
