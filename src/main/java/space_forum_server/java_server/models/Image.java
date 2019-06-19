@@ -13,6 +13,7 @@ public class Image {
   @OneToMany
   private List<ForumThread> forumThreads;
   @ManyToMany
+  @JoinColumn(name = "user")
   private List<User> likedBy;
 
   public Image() {
