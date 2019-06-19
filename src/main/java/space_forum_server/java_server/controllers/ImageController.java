@@ -27,9 +27,9 @@ public class ImageController {
 
     HashMap<String, Integer> likedByUser = new HashMap<>();
 
-    for(Image img : likedImgs){
+    for (Image img : likedImgs) {
       String key = img.getCategory();
-      if(likedByUser.containsKey(key)){
+      if (likedByUser.containsKey(key)) {
         likedByUser.replace(key, likedByUser.get(key) + 1);
       } else {
         likedByUser.put(key, 1);
@@ -41,8 +41,10 @@ public class ImageController {
   @CrossOrigin(origins = "*")
   @PostMapping("/api/images")
   public List<Image> addImage(@RequestBody Image newImage) {
-    imageRepository.save(newImage);
-    return (List<Image>)imageRepository.findAll();
+    if (!imageRepository.existsById(newImage.getId())) {
+      imageRepository.save(newImage);
+    }
+    return (List<Image>) imageRepository.findAll();
   }
 
   @CrossOrigin(origins = "*")
@@ -51,7 +53,7 @@ public class ImageController {
     User user = userController.authenticateUser(sessionid);
     Optional<Image> opt = imageRepository.findById(imageid);
     Image img = opt.orElse(null);
-    if(img.getLikedBy().contains(user)){
+    if (img.getLikedBy().contains(user)) {
       img.getLikedBy().remove(user);
     } else {
       img.getLikedBy().add(user);
@@ -63,7 +65,7 @@ public class ImageController {
   @CrossOrigin(origins = "*")
   @GetMapping("/api/images")
   public List<Image> findAllImages() {
-    return (List<Image>)imageRepository.findAll();
+    return (List<Image>) imageRepository.findAll();
   }
 
   @CrossOrigin(origins = "*")
@@ -75,13 +77,13 @@ public class ImageController {
     img.setUrl(newImage.getUrl());
     img.setForumThreads(newImage.getForumThreads());
     imageRepository.save(img);
-    return (List<Image>)imageRepository.findAll();
+    return (List<Image>) imageRepository.findAll();
   }
 
   @DeleteMapping("/api/images/{imageid}")
   public List<Image> deleteImage(@PathVariable("imageid") int imageid) {
     imageRepository.deleteById(imageid);
-    return (List<Image>)imageRepository.findAll();
+    return (List<Image>) imageRepository.findAll();
   }
 
 }
