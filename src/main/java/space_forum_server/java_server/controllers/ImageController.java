@@ -1,16 +1,13 @@
 package space_forum_server.java_server.controllers;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import space_forum_server.java_server.models.*;
 import space_forum_server.java_server.repositories.ImageRepository;
 
@@ -36,25 +33,38 @@ public class ImageController {
         likedByUser.put(key, 1);
       }
     }
-
     return Collections.max(likedByUser.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
   }
-//
-//  @CrossOrigin(origins = "*")
-//  @PostMapping("/api/images")
-//  public List<Image> findAllImages() {
-//    return (List<Image>)imageRepository.findAll();
-//  }
-//
-//  @CrossOrigin(origins = "*")
-//  @GetMapping("/api/images")
-//  public List<Image> findAllImages() {
-//    return (List<Image>)imageRepository.findAll();
-//  }
-//
-//  @DeleteMapping("/api/images/{imageid}")
-//  public List<Image> deleteImage() {
-//    return (List<Image>)imageRepository.findAll();
-//  }
+
+  @CrossOrigin(origins = "*")
+  @PostMapping("/api/images")
+  public List<Image> addImage(@RequestBody Image newImage) {
+    imageRepository.save(newImage);
+    return (List<Image>)imageRepository.findAll();
+  }
+
+  @CrossOrigin(origins = "*")
+  @GetMapping("/api/images")
+  public List<Image> findAllImages() {
+    return (List<Image>)imageRepository.findAll();
+  }
+
+  @CrossOrigin(origins = "*")
+  @GetMapping("/api/images/{imageid}")
+  public List<Image> updateImage(@PathVariable("imageid") int imageid, @RequestBody Image newImage) {
+    Optional<Image> opt = imageRepository.findById(imageid);
+    Image img = opt.orElse(null);
+    img.setCategory(newImage.getCategory());
+    img.setUrl(newImage.getUrl());
+    img.setForumThreads(newImage.getForumThreads());
+    imageRepository.save(img);
+    return (List<Image>)imageRepository.findAll();
+  }
+
+  @DeleteMapping("/api/images/{imageid}")
+  public List<Image> deleteImage(@PathVariable("imageid") int imageid) {
+    imageRepository.deleteById(imageid);
+    return (List<Image>)imageRepository.findAll();
+  }
 
 }
