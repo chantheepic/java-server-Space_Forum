@@ -16,6 +16,8 @@ public class ImageController {
 
   @Autowired
   ImageRepository imageRepository;
+  @Autowired
+  UserController userController;
 
   @CrossOrigin(origins = "*")
   @GetMapping("/api/images/recommendCategory/{sessionid}")
@@ -41,6 +43,17 @@ public class ImageController {
   public List<Image> addImage(@RequestBody Image newImage) {
     imageRepository.save(newImage);
     return (List<Image>)imageRepository.findAll();
+  }
+
+  @CrossOrigin(origins = "*")
+  @PostMapping("/api/user/{sessionid}/images/{imageid}")
+  public Image likeImage(@PathVariable("userid") String sessionid, @PathVariable("imageid") int imageid) {
+    User user = userController.authenticateUser(sessionid);
+    Optional<Image> opt = imageRepository.findById(imageid);
+    Image img = opt.orElse(null);
+    img.getLikedBy().add(user);
+    imageRepository.save(img);
+    return img;
   }
 
   @CrossOrigin(origins = "*")

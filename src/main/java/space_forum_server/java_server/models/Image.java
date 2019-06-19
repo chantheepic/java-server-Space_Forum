@@ -19,11 +19,13 @@ public class Image {
     super();
   }
 
-  public Image(int id, String url, String category, List<ForumThread> forumThreads) {
+  public Image(int id, String url, String category,
+      List<ForumThread> forumThreads, List<User> likedBy) {
     this.id = id;
     this.url = url;
     this.category = category;
     this.forumThreads = forumThreads;
+    this.likedBy = likedBy;
   }
 
   public String getCategory() {
@@ -56,5 +58,13 @@ public class Image {
 
   public void setForumThreads(List<ForumThread> forumThreads) {
     this.forumThreads = forumThreads;
+  }
+
+  public List<User> getLikedBy() {
+    return likedBy;
+  }
+
+  public void setLikedBy(List<User> likedBy) {
+    this.likedBy = likedBy;
   }
 }
