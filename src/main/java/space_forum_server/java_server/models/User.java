@@ -39,11 +39,12 @@ public class User {
     super();
   }
 
-  public User(String username, String alias, String password) {
+  public User(String username, String alias, String password, boolean isAdmin) {
     this.id = 0;
     this.username = username;
     this.alias = alias;
     this.password = password;
+    this.isAdmin = isAdmin;
   }
 
   public User(String username, String alias, String password, boolean banned, boolean isAdmin,

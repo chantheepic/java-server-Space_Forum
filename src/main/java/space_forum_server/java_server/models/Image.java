@@ -1,5 +1,7 @@
 package space_forum_server.java_server.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.*;
@@ -16,6 +18,7 @@ public class Image {
   private List<ForumThread> forumThreads;
   @ManyToMany(mappedBy = "likedImages", fetch = FetchType.EAGER)
   @Fetch(value = FetchMode.JOIN)
+  @JsonIgnore
   private List<User> likedBy;
 
   public Image() {

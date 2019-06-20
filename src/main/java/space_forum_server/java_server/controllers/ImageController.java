@@ -1,5 +1,6 @@
 package space_forum_server.java_server.controllers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -22,8 +23,7 @@ public class ImageController {
   @CrossOrigin(origins = "*")
   @GetMapping("/api/images/recommendCategory/{sessionid}")
   public String recommend(@PathVariable("sessionid") String sessionid) {
-    UserController uc = new UserController();
-    List<Image> likedImgs = uc.authenticateUser(sessionid).getLikedImages();
+    List<Image> likedImgs = userController.authenticateUser(sessionid).getLikedImages();
 
     HashMap<String, Integer> likedByUser = new HashMap<>();
 
@@ -35,6 +35,7 @@ public class ImageController {
         likedByUser.put(key, 1);
       }
     }
+
     return Collections.max(likedByUser.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
   }
 
@@ -49,17 +50,19 @@ public class ImageController {
 
   @CrossOrigin(origins = "*")
   @PostMapping("/api/user/{sessionid}/images/{imageid}")
-  public Image likeImage(@PathVariable("userid") String sessionid, @PathVariable("imageid") int imageid) {
+  public List<Image> likeImage(@PathVariable("sessionid") String sessionid, @PathVariable("imageid") int imageid) {
     User user = userController.authenticateUser(sessionid);
     Optional<Image> opt = imageRepository.findById(imageid);
     Image img = opt.orElse(null);
     if (img.getLikedBy().contains(user)) {
       img.getLikedBy().remove(user);
+      user.getLikedImages().remove(img);
     } else {
       img.getLikedBy().add(user);
+      user.getLikedImages().add(img);
     }
     imageRepository.save(img);
-    return img;
+    return user.getLikedImages();
   }
 
   @CrossOrigin(origins = "*")
