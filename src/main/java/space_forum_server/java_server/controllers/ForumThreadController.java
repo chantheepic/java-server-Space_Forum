@@ -32,8 +32,9 @@ public class ForumThreadController {
     return opt.orElse(null);
   }
 
+  //api/threads/register/{sessionid}"
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/threads/register/{sessionid}")
+  @PostMapping("/api/threads/{sessionid}")
   public ForumThread registerThread(@PathVariable("sessionid") String sessionid,
       @RequestBody ThreadWrapper givenThread) {
     ForumThread ft = new ForumThread();
@@ -41,9 +42,6 @@ public class ForumThreadController {
     ft.setType(givenThread.getType());
     ft.setAuthor(userController.authenticateUser(sessionid));
 
-    Timestamp ts = new Timestamp(System.currentTimeMillis());
-    ft.setCreateTime(ts);
-    ft.setCreateTime(ts);
     if (givenThread.getType().equals("IMAGE")) {
       Image img;
       if (imageRepository.existsById(givenThread.getImageId())) {
@@ -66,8 +64,9 @@ public class ForumThreadController {
     return ft;
   }
 
+  //api/threads/checkowner/{sessionid}/{threadid}
   @CrossOrigin(origins = "*")
-  @GetMapping("/api/threads/checkowner/{sessionid}/{threadid}")
+  @GetMapping("/api/users/{sessionid}/threads/{threadid}")
   public boolean checkThreadOwner(@PathVariable("sessionid") String sessionid, @PathVariable("threadid") int threadid) {
     User user = userController.authenticateUser(sessionid);
     Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
@@ -78,8 +77,9 @@ public class ForumThreadController {
     return false;
   }
 
+  //api/threads/vote/{sessionid}/{threadid}
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/threads/vote/{sessionid}/{threadid}")
+  @PostMapping("/api/users/{sessionid}/threads/{threadid}")
   public ForumThread submitVote(@PathVariable("sessionid") String sessionid, @PathVariable("threadid") int threadid,
       @RequestBody String vote) {
     User user = userController.authenticateUser(sessionid);
@@ -114,27 +114,29 @@ public class ForumThreadController {
     }
   }
 
+  //api/threads/update/{threadid}
   @CrossOrigin(origins = "*")
-  @PutMapping("/api/threads/update/{threadid}")
+  @PutMapping("/api/threads/{threadid}")
   public ForumThread updateThread(@PathVariable("threadid") int threadid, @RequestBody ForumThread thread) {
     Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
     ForumThread ft = opt.orElse(null);
     ft.setTitle(thread.getTitle());
     ft.setText(thread.getText());
-    ft.setLastedUpdated(new Timestamp((System.currentTimeMillis())));
     forumThreadRepository.save(ft);
     return ft;
   }
 
+  //api/threads/delete/{threadid}
   @CrossOrigin(origins = "*")
-  @DeleteMapping("/api/threads/delete/{threadid}")
+  @DeleteMapping("/api/threads/{threadid}")
   public String deleteThread(@PathVariable("sessionid") int threadid) {
     forumThreadRepository.deleteById(threadid);
     return "suceess";
   }
 
+  //api/threads/getbyimgid/{imageid}"
   @CrossOrigin(origins = "*")
-  @GetMapping("/api/threads/getbyimgid/{imageid}")
+  @GetMapping("/api/images/{imageid}/threads")
   public List<ForumThread> findAllThreadsByImgId(@PathVariable("imageid") int imageid) {
     List<ForumThread> allThreads = (List<ForumThread>) forumThreadRepository.findAll();
     List<ForumThread> filteredThreads = new ArrayList<ForumThread>();

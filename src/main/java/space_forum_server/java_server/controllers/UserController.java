@@ -27,18 +27,20 @@ public class UserController {
   @CrossOrigin(origins = "*")
   @GetMapping("/api/users")
   public List<User> findAllUsers() {
-    return (List<User>)userRepository.findAll();
+    return (List<User>) userRepository.findAll();
   }
 
+  //api/users/{userid}
   @CrossOrigin(origins = "*")
-  @DeleteMapping("/api/users/delete/{userid}")
-  public List<User> findAllUsers(@PathVariable("userid") int userid) {
+  @GetMapping("/api/users/{userid}")
+  public List<User> findUserById(@PathVariable("userid") int userid) {
     userRepository.deleteById(userid);
-    return (List<User>)userRepository.findAll();
+    return (List<User>) userRepository.findAll();
   }
 
+  //api/users/register
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/users/register")
+  @PostMapping("/api/users")
   public UserSession registerUser(@RequestBody User newUser) {
     try {
       userRepository.save(newUser);
@@ -51,8 +53,9 @@ public class UserController {
     }
   }
 
+  //api/users/login
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/users/login")
+  @PostMapping("/api/userlogin")
   public UserSession loginUser(@RequestBody User returning) {
     try {
       User user = userRepository.authenticate(returning.getUsername(), returning.getPassword());
@@ -69,8 +72,9 @@ public class UserController {
     }
   }
 
+  //api/users/update/{sessionid}
   @CrossOrigin(origins = "*")
-  @PutMapping("/api/users/update/{sessionid}")
+  @PutMapping("/api/users/{sessionid}")
   public String updateUser(@PathVariable("sessionid") String sessionid, @RequestBody User updatedProfile) {
     try {
       User user = authenticateUser(sessionid);
@@ -84,13 +88,14 @@ public class UserController {
     }
   }
 
+  //api/users/promote/{direction}
   @CrossOrigin(origins = "*")
-  @PutMapping("/api/users/promote/{direction}")
-  public String promoteUser(@PathVariable("direction") String direction,@RequestBody User u) {
+  @PutMapping("/api/promoteuser/{direction}")
+  public String promoteUser(@PathVariable("direction") String direction, @RequestBody User u) {
     try {
       Optional<User> opt = userRepository.findById(u.getId());
       User user = opt.orElse(null);
-      if(direction.equals("PROMOTE")){
+      if (direction.equals("PROMOTE")) {
         user.setAdmin(true);
       } else {
         user.setAdmin(false);
@@ -102,13 +107,14 @@ public class UserController {
     }
   }
 
+  //api/users/ban/{direction}"
   @CrossOrigin(origins = "*")
-  @PutMapping("/api/users/ban/{direction}")
-  public String banUser(@PathVariable("direction") String direction,@RequestBody User u) {
+  @PutMapping("/api/banuser/{direction}")
+  public String banUser(@PathVariable("direction") String direction, @RequestBody User u) {
     try {
       Optional<User> opt = userRepository.findById(u.getId());
       User user = opt.orElse(null);
-      if(direction.equals("BAN")){
+      if (direction.equals("BAN")) {
         user.setBanned(true);
       } else {
         user.setBanned(false);
@@ -120,10 +126,9 @@ public class UserController {
     }
   }
 
-
-  // Not for external use. Endpoint is just for testing. Don't use on front end.
+  //api/users/{id}
   @CrossOrigin(origins = "*")
-  @GetMapping("/api/users/{id}")
+  @GetMapping("/api/authenticateuser/{id}")
   public User authenticateUser(@PathVariable("id") String sessionid) {
     try {
       UserSession session = userSessionRepository.matchSession(sessionid);

@@ -38,7 +38,6 @@ public class ForumPostController {
     ForumPost newPost = new ForumPost();
     newPost.setContent(postWrapper.getContent());
     newPost.setAuthor(author);
-    newPost.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 
     Optional<ForumThread> opt = forumThreadRepository.findById(postWrapper.getThreadid());
     ForumThread ft = opt.orElse(null);
@@ -59,8 +58,9 @@ public class ForumPostController {
     return ft;
   }
 
+  //api/users/{sessionid}/posts/{postid}/checkOwner
   @CrossOrigin(origins = "*")
-  @GetMapping("/api/users/{sessionid}/posts/{postid}/checkOwner")
+  @GetMapping("/api/users/{sessionid}/posts/{postid}")
   public boolean checkPostOwner(@PathVariable("sessionid") String sessionid, @PathVariable("postid") int postid) {
     User user = userController.authenticateUser(sessionid);
     Optional<ForumPost> opt = forumPostRepository.findById(postid);
@@ -77,7 +77,6 @@ public class ForumPostController {
     Optional<ForumPost> opt = forumPostRepository.findById(postid);
     ForumPost fp = opt.orElse(null);
     fp.setContent(update.getContent());
-    fp.setUpdateTime(new Timestamp(System.currentTimeMillis()));
     forumPostRepository.save(fp);
     return fp;
   }
