@@ -34,7 +34,8 @@ public class ForumThreadController {
 
   @CrossOrigin(origins = "*")
   @PostMapping("/api/threads/register/{sessionid}")
-  public ForumThread registerThread(@PathVariable("sessionid") String sessionid, @RequestBody ThreadWrapper givenThread) {
+  public ForumThread registerThread(@PathVariable("sessionid") String sessionid,
+      @RequestBody ThreadWrapper givenThread) {
     ForumThread ft = new ForumThread();
     ft.setTitle(givenThread.getTitle());
     ft.setType(givenThread.getType());
@@ -85,26 +86,32 @@ public class ForumThreadController {
     Optional<ForumThread> opt = forumThreadRepository.findById(threadid);
     ForumThread ft = opt.orElse(null);
     if (vote.equals("UPVOTE")) {
-      if(ft.getUpvotedBy().contains(user)){
+      if (ft.getUpvotedBy().contains(user)) {
         ft.getUpvotedBy().remove(user);
       } else {
         ft.getUpvotedBy().add(user);
-        if(ft.getDownvotedBy().contains(user)){
+        if (ft.getDownvotedBy().contains(user)) {
           ft.getDownvotedBy().remove(user);
         }
       }
     } else {
-      if(ft.getDownvotedBy().contains(user)){
+      if (ft.getDownvotedBy().contains(user)) {
         ft.getDownvotedBy().remove(user);
       } else {
         ft.getDownvotedBy().add(user);
-        if(ft.getUpvotedBy().contains(user)){
+        if (ft.getUpvotedBy().contains(user)) {
           ft.getUpvotedBy().remove(user);
         }
       }
     }
-    forumThreadRepository.save(ft);
-    return ft;
+    try {
+      forumThreadRepository.save(ft);
+      return ft;
+    } catch (Exception e) {
+      opt = forumThreadRepository.findById(threadid);
+      ft = opt.orElse(null);
+      return ft;
+    }
   }
 
   @CrossOrigin(origins = "*")

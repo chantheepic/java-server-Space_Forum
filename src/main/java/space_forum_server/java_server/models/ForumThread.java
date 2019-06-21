@@ -3,8 +3,10 @@ package space_forum_server.java_server.models;
     import com.fasterxml.jackson.annotation.JsonIgnore;
     import java.sql.Timestamp;
     import java.util.List;
+    import java.util.Set;
     import javax.persistence.CascadeType;
     import javax.persistence.Entity;
+    import javax.persistence.FetchType;
     import javax.persistence.GeneratedValue;
     import javax.persistence.GenerationType;
     import javax.persistence.Id;
@@ -13,6 +15,8 @@ package space_forum_server.java_server.models;
     import javax.persistence.ManyToMany;
     import javax.persistence.ManyToOne;
     import javax.persistence.OneToMany;
+    import org.hibernate.annotations.Fetch;
+    import org.hibernate.annotations.FetchMode;
 
 @Entity
 public class ForumThread {
@@ -31,11 +35,25 @@ public class ForumThread {
   private Timestamp createTime;
   private Timestamp lastedUpdated;
   @OneToMany
-  private List<User> upvotedBy;
-  @OneToMany
-  private List<User> downvotedBy;
-  @OneToMany
   private List<ForumPost> posts;
+
+  @ManyToMany
+  @JoinTable(name = "ThreadLikedByUser",
+      joinColumns = @JoinColumn(name = "ThreadID",
+          referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name =
+          "UserID", referencedColumnName = "id"))
+  @Fetch(value = FetchMode.JOIN)
+  private Set<User> upvotedBy;
+
+  @ManyToMany
+  @JoinTable(name = "ThreadDislikedByUser",
+      joinColumns = @JoinColumn(name = "ThreadID",
+          referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name =
+          "UserID", referencedColumnName = "id"))
+  @Fetch(value = FetchMode.JOIN)
+  private Set<User> downvotedBy;
 
   public ForumThread() {
     super();
@@ -48,7 +66,7 @@ public class ForumThread {
 
   public ForumThread(String title, Image image, String text, String type,
       User author, Timestamp createTime, Timestamp lastedUpdated,
-      List<User> upvotedBy, List<User> downvotedBy, List<ForumPost> posts) {
+      Set<User> upvotedBy, Set<User> downvotedBy, List<ForumPost> posts) {
     this.title = title;
     this.image = image;
     this.text = text;
@@ -125,19 +143,19 @@ public class ForumThread {
     this.lastedUpdated = lastedUpdated;
   }
 
-  public List<User> getUpvotedBy() {
+  public Set<User> getUpvotedBy() {
     return upvotedBy;
   }
 
-  public void setUpvotedBy(List<User> upvotedBy) {
+  public void setUpvotedBy(Set<User> upvotedBy) {
     this.upvotedBy = upvotedBy;
   }
 
-  public List<User> getDownvotedBy() {
+  public Set<User> getDownvotedBy() {
     return downvotedBy;
   }
 
-  public void setDownvotedBy(List<User> downvotedBy) {
+  public void setDownvotedBy(Set<User> downvotedBy) {
     this.downvotedBy = downvotedBy;
   }
 

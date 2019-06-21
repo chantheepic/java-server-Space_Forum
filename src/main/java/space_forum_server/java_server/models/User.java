@@ -4,6 +4,7 @@ package space_forum_server.java_server.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -32,8 +33,14 @@ public class User {
   private List<ForumPost> createdForumPost;
   @OneToMany
   private List<ForumThread> createdForumThreads;
-  @OneToMany
-  private List<ForumThread> followingThreads;
+
+  @ManyToMany(mappedBy = "upvotedBy", cascade = CascadeType.ALL)
+  @Fetch(value = FetchMode.JOIN)
+  private Set<ForumThread> likedThreads;
+
+  @ManyToMany(mappedBy = "downvotedBy", cascade = CascadeType.ALL)
+  @Fetch(value = FetchMode.JOIN)
+  private Set<ForumThread> dislikedThreads;
 
   public User() {
     super();
@@ -49,8 +56,7 @@ public class User {
 
   public User(String username, String alias, String password, boolean banned, boolean isAdmin,
       List<Image> likedImages, List<ForumPost> createdForumPost,
-      List<ForumThread> createdForumThreads,
-      List<ForumThread> followingThreads) {
+      List<ForumThread> createdForumThreads) {
     this.username = username;
     this.alias = alias;
     this.password = password;
@@ -59,7 +65,6 @@ public class User {
     this.likedImages = likedImages;
     this.createdForumPost = createdForumPost;
     this.createdForumThreads = createdForumThreads;
-    this.followingThreads = followingThreads;
   }
 
   public String getPassword() {
@@ -116,14 +121,6 @@ public class User {
 
   public void setCreatedForumThreads(List<ForumThread> createdForumThreads) {
     this.createdForumThreads = createdForumThreads;
-  }
-
-  public List<ForumThread> getFollowingThreads() {
-    return followingThreads;
-  }
-
-  public void setFollowingThreads(List<ForumThread> followingThreads) {
-    this.followingThreads = followingThreads;
   }
 
   public boolean isBanned() {

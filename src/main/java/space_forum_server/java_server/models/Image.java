@@ -16,7 +16,9 @@ public class Image {
   private String category;
   @OneToMany
   private List<ForumThread> forumThreads;
-  @ManyToMany(mappedBy = "likedImages", fetch = FetchType.EAGER)
+
+//  , fetch = FetchType.EAGER
+  @ManyToMany(mappedBy = "likedImages")
   @Fetch(value = FetchMode.JOIN)
   @JsonIgnore
   private List<User> likedBy;
