@@ -20,7 +20,6 @@ public class ForumPost {
   @ManyToOne
   @JoinColumn(name = "author")
   private User author;
-  private Timestamp updateTime;
   private String content;
   @OneToMany
   private List<User> upvotedBy;
@@ -41,11 +40,8 @@ public class ForumPost {
     this.content = content;
   }
 
-  public ForumPost(User author, Timestamp updateTime, String content,
-                   List<User> upvotedBy, List<User> downvotedBy, ForumThread associatedThread,
-                   List<ForumPost> replies) {
+  public ForumPost(User author, String content, List<User> upvotedBy, List<User> downvotedBy, ForumThread associatedThread, List<ForumPost> replies) {
     this.author = author;
-    this.updateTime = updateTime;
     this.content = content;
     this.upvotedBy = upvotedBy;
     this.downvotedBy = downvotedBy;
@@ -75,14 +71,6 @@ public class ForumPost {
 
   public void setAuthor(User author) {
     this.author = author;
-  }
-
-  public Timestamp getUpdateTime() {
-    return updateTime;
-  }
-
-  public void setUpdateTime(Timestamp updateTime) {
-    this.updateTime = updateTime;
   }
 
   public String getContent() {

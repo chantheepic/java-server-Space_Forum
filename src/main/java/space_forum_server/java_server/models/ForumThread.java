@@ -32,8 +32,6 @@ public class ForumThread {
   @ManyToOne
   @JoinColumn(name = "author")
   private User author;
-  private Timestamp createTime;
-  private Timestamp lastedUpdated;
   @OneToMany
   private List<ForumPost> posts;
 
@@ -65,15 +63,12 @@ public class ForumThread {
   }
 
   public ForumThread(String title, Image image, String text, String type,
-      User author, Timestamp createTime, Timestamp lastedUpdated,
-      Set<User> upvotedBy, Set<User> downvotedBy, List<ForumPost> posts) {
+      User author, Set<User> upvotedBy, Set<User> downvotedBy, List<ForumPost> posts) {
     this.title = title;
     this.image = image;
     this.text = text;
     this.type = type;
     this.author = author;
-    this.createTime = createTime;
-    this.lastedUpdated = lastedUpdated;
     this.upvotedBy = upvotedBy;
     this.downvotedBy = downvotedBy;
     this.posts = posts;
@@ -125,22 +120,6 @@ public class ForumThread {
 
   public void setAuthor(User author) {
     this.author = author;
-  }
-
-  public Timestamp getCreateTime() {
-    return createTime;
-  }
-
-  public void setCreateTime(Timestamp createTime) {
-    this.createTime = createTime;
-  }
-
-  public Timestamp getLastedUpdated() {
-    return lastedUpdated;
-  }
-
-  public void setLastedUpdated(Timestamp lastedUpdated) {
-    this.lastedUpdated = lastedUpdated;
   }
 
   public Set<User> getUpvotedBy() {

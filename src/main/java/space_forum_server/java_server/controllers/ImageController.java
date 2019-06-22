@@ -21,25 +21,6 @@ public class ImageController {
   UserController userController;
 
   @CrossOrigin(origins = "*")
-  @GetMapping("/api/images/recommendCategory/{sessionid}")
-  public String recommend(@PathVariable("sessionid") String sessionid) {
-    List<Image> likedImgs = userController.authenticateUser(sessionid).getLikedImages();
-
-    HashMap<String, Integer> likedByUser = new HashMap<>();
-
-    for (Image img : likedImgs) {
-      String key = img.getCategory();
-      if (likedByUser.containsKey(key)) {
-        likedByUser.replace(key, likedByUser.get(key) + 1);
-      } else {
-        likedByUser.put(key, 1);
-      }
-    }
-
-    return Collections.max(likedByUser.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
-  }
-
-  @CrossOrigin(origins = "*")
   @PostMapping("/api/images")
   public List<Image> addImage(@RequestBody Image newImage) {
     if (!imageRepository.existsById(newImage.getId())) {
@@ -49,7 +30,7 @@ public class ImageController {
   }
 
   @CrossOrigin(origins = "*")
-  @PostMapping("/api/user/{sessionid}/images/{imageid}")
+  @PostMapping("/api/users/{sessionid}/images/{imageid}")
   public List<Image> likeImage(@PathVariable("sessionid") String sessionid, @PathVariable("imageid") int imageid) {
     User user = userController.authenticateUser(sessionid);
     Optional<Image> opt = imageRepository.findById(imageid);
