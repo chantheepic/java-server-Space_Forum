@@ -129,9 +129,9 @@ public class ForumThreadController {
   //api/threads/delete/{threadid}
   @CrossOrigin(origins = "*")
   @DeleteMapping("/api/threads/{threadid}")
-  public String deleteThread(@PathVariable("sessionid") int threadid) {
+  public String deleteThread(@PathVariable("threadid") int threadid) {
     forumThreadRepository.deleteById(threadid);
-    return "suceess";
+    return "success";
   }
 
   //api/threads/getbyimgid/{imageid}"
