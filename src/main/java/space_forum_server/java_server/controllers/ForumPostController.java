@@ -83,9 +83,13 @@ public class ForumPostController {
 
   @CrossOrigin(origins = "*")
   @DeleteMapping("/api/posts/{postid}")
-  public String deletePost(@PathVariable("postid") int postid) {
+  public ForumThread deletePost(@PathVariable("postid") int postid) {
+    Optional<ForumPost> opt = forumPostRepository.findById(postid);
+    ForumPost fp = opt.orElse(null);
+    ForumThread ft = fp.getAssociatedThread();
+
     forumPostRepository.deleteById(postid);
-    return "suceess";
+    return ft;
   }
 
 }
