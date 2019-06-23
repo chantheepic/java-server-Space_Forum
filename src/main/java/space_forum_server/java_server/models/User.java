@@ -81,7 +81,7 @@ public class User {
     this.createdForumPost = createdForumPost;
     this.createdForumThreads = createdForumThreads;
   }
-  
+
   public Set<User> getFollowing() {
     return following;
   }

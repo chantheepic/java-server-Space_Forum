@@ -135,9 +135,13 @@ public class UserController {
       User followee = opt.orElse(null);
 
       if (direction.equals("FOLLOW")) {
-        follower.getFollowing().add(followee);
+        if(!follower.getFollowing().contains(followee)){
+          follower.getFollowing().add(followee);
+        }
       } else {
-        follower.getFollowing().remove(followee);
+        if(follower.getFollowing().contains(followee)){
+          follower.getFollowing().remove(followee);
+        }
       }
       userRepository.save(follower);
       return "User Followed";
