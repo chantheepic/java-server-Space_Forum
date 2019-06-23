@@ -128,23 +128,19 @@ public class UserController {
 
   @CrossOrigin(origins = "*")
   @PutMapping("/api/user/{sessionid}/follow/{followeeid}/direction/{direction}")
-  public String followUser(@PathVariable("sessionid") String sessionid, @PathVariable("followeeid") int followeeid, @PathVariable("direction") String direction) {
+  public User followUser(@PathVariable("sessionid") String sessionid, @PathVariable("followeeid") int followeeid, @PathVariable("direction") String direction) {
     try {
       User follower = authenticateUser(sessionid);
       Optional<User> opt = userRepository.findById(followeeid);
       User followee = opt.orElse(null);
 
       if (direction.equals("FOLLOW")) {
-        if(!follower.getFollowing().contains(followee)){
-          follower.getFollowing().add(followee);
-        }
+        follower.getFollowing().add(followee);
       } else {
-        if(follower.getFollowing().contains(followee)){
-          follower.getFollowing().remove(followee);
-        }
+        follower.getFollowing().remove(followee);
       }
       userRepository.save(follower);
-      return "User Followed";
+      return follower;
     } catch (Exception e) {
       return null;
     }
