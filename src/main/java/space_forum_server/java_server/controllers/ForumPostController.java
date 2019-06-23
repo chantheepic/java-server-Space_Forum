@@ -88,6 +88,15 @@ public class ForumPostController {
     ForumPost fp = opt.orElse(null);
     ForumThread ft = fp.getAssociatedThread();
     fp.setAssociatedThread(null);
+
+    for(ForumPost fpp : forumPostRepository.findAll()){
+      if(fpp.getReplies().contains(fp)){
+        fpp.getReplies().remove(fp);
+        forumPostRepository.save(fpp);
+        break;
+      }
+    }
+
     ft.getPosts().remove(fp);
     forumThreadRepository.save(ft);
     forumPostRepository.deleteById(postid);
