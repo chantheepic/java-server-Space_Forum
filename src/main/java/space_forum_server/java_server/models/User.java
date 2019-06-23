@@ -81,23 +81,7 @@ public class User {
     this.createdForumPost = createdForumPost;
     this.createdForumThreads = createdForumThreads;
   }
-
-  public Set<ForumThread> getLikedThreads() {
-    return likedThreads;
-  }
-
-  public void setLikedThreads(Set<ForumThread> likedThreads) {
-    this.likedThreads = likedThreads;
-  }
-
-  public Set<ForumThread> getDislikedThreads() {
-    return dislikedThreads;
-  }
-
-  public void setDislikedThreads(Set<ForumThread> dislikedThreads) {
-    this.dislikedThreads = dislikedThreads;
-  }
-
+  
   public Set<User> getFollowing() {
     return following;
   }

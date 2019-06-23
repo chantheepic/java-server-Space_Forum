@@ -22,7 +22,7 @@ public class ForumPost {
   @JoinColumn(name = "author")
   private User author;
   private String content;
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.REMOVE)
   @JsonIgnore
   @JoinColumn(name = "thread")
   private ForumThread associatedThread;
