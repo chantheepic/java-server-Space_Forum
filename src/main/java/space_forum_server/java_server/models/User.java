@@ -43,6 +43,20 @@ public class User {
   @Fetch(value = FetchMode.JOIN)
   private Set<ForumThread> dislikedThreads;
 
+  @ManyToMany
+  @JoinTable(name = "UserFollow",
+      joinColumns = @JoinColumn(name = "FollowerID",
+          referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name =
+          "FolloweeID", referencedColumnName = "id"))
+  @Fetch(value = FetchMode.JOIN)
+  private Set<User> following;
+
+  @ManyToMany(mappedBy = "following")
+  @Fetch(value = FetchMode.JOIN)
+  @JsonIgnore
+  private Set<User> followedBy;
+
   public User() {
     super();
   }
@@ -66,6 +80,38 @@ public class User {
     this.likedImages = likedImages;
     this.createdForumPost = createdForumPost;
     this.createdForumThreads = createdForumThreads;
+  }
+
+  public Set<ForumThread> getLikedThreads() {
+    return likedThreads;
+  }
+
+  public void setLikedThreads(Set<ForumThread> likedThreads) {
+    this.likedThreads = likedThreads;
+  }
+
+  public Set<ForumThread> getDislikedThreads() {
+    return dislikedThreads;
+  }
+
+  public void setDislikedThreads(Set<ForumThread> dislikedThreads) {
+    this.dislikedThreads = dislikedThreads;
+  }
+
+  public Set<User> getFollowing() {
+    return following;
+  }
+
+  public void setFollowing(Set<User> following) {
+    this.following = following;
+  }
+
+  public Set<User> getFollowedBy() {
+    return followedBy;
+  }
+
+  public void setFollowedBy(Set<User> followedBy) {
+    this.followedBy = followedBy;
   }
 
   public String getPassword() {

@@ -126,6 +126,26 @@ public class UserController {
     }
   }
 
+  @CrossOrigin(origins = "*")
+  @PutMapping("/api/user/{sessionid}/follow/{followeeid}/direction/{direction}")
+  public String followUser(@PathVariable("sessionid") String sessionid, @PathVariable("followeeid") int followeeid, @PathVariable("direction") String direction) {
+    try {
+      User follower = authenticateUser(sessionid);
+      Optional<User> opt = userRepository.findById(followeeid);
+      User followee = opt.orElse(null);
+
+      if (direction.equals("FOLLOW")) {
+        follower.getFollowing().add(followee);
+      } else {
+        follower.getFollowing().remove(followee);
+      }
+      userRepository.save(follower);
+      return "User Followed";
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
   //api/users/{id}
   @CrossOrigin(origins = "*")
   @GetMapping("/api/authenticateuser/{id}")

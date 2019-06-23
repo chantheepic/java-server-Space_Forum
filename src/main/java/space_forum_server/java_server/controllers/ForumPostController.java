@@ -87,7 +87,6 @@ public class ForumPostController {
     Optional<ForumPost> opt = forumPostRepository.findById(postid);
     ForumPost fp = opt.orElse(null);
     ForumThread ft = fp.getAssociatedThread();
-
     forumPostRepository.deleteById(postid);
     return ft;
   }
