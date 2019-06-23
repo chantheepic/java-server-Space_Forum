@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -21,7 +22,7 @@ public class User {
   private String password;
   private boolean banned;
   private boolean isAdmin;
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "FavoriteImages",
       joinColumns = @JoinColumn(name = "UserID",
           referencedColumnName = "id"),
@@ -29,9 +30,9 @@ public class User {
           "ImageID", referencedColumnName = "id"))
   @Fetch(value = FetchMode.JOIN)
   private List<Image> likedImages;
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   private List<ForumPost> createdForumPost;
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   private List<ForumThread> createdForumThreads;
 
   @ManyToMany(mappedBy = "upvotedBy", cascade = CascadeType.ALL)

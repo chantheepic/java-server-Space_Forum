@@ -3,6 +3,7 @@ package space_forum_server.java_server.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.sql.Timestamp;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,15 +22,11 @@ public class ForumPost {
   @JoinColumn(name = "author")
   private User author;
   private String content;
-  @OneToMany
-  private List<User> upvotedBy;
-  @OneToMany
-  private List<User> downvotedBy;
   @ManyToOne
   @JsonIgnore
   @JoinColumn(name = "thread")
   private ForumThread associatedThread;
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   private List<ForumPost> replies;
 
   public ForumPost() {
@@ -40,11 +37,9 @@ public class ForumPost {
     this.content = content;
   }
 
-  public ForumPost(User author, String content, List<User> upvotedBy, List<User> downvotedBy, ForumThread associatedThread, List<ForumPost> replies) {
+  public ForumPost(User author, String content, ForumThread associatedThread, List<ForumPost> replies) {
     this.author = author;
     this.content = content;
-    this.upvotedBy = upvotedBy;
-    this.downvotedBy = downvotedBy;
     this.associatedThread = associatedThread;
     this.replies = replies;
   }
@@ -79,22 +74,6 @@ public class ForumPost {
 
   public void setContent(String content) {
     this.content = content;
-  }
-
-  public List<User> getUpvotedBy() {
-    return upvotedBy;
-  }
-
-  public void setUpvotedBy(List<User> upvotedBy) {
-    this.upvotedBy = upvotedBy;
-  }
-
-  public List<User> getDownvotedBy() {
-    return downvotedBy;
-  }
-
-  public void setDownvotedBy(List<User> downvotedBy) {
-    this.downvotedBy = downvotedBy;
   }
 
   public List<ForumPost> getReplies() {

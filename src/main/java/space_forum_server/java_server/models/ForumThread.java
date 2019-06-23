@@ -32,7 +32,7 @@ public class ForumThread {
   @ManyToOne
   @JoinColumn(name = "author")
   private User author;
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   private List<ForumPost> posts;
 
   @ManyToMany
